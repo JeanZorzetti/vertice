@@ -99,6 +99,19 @@
 - Schema: Agency.plan, trialEndsAt, mpSubscriptionId, mpSubscriptionStatus, onboardedAt
 - Migration: 20260301200000_sprint8_billing_tour
 - Planos MP criados: Starter R$97 (c696c00ae61a40748b010c83d2ae4f5f), Pro R$197 (3c72932f00334ee28d5f98862f2926d6), Agency R$397 (38550466d48f462cb4fd34f20c819db0)
+
+✅ FASE 3 — Sprint 9 (CONCLUÍDO)
+- Assinatura digital eletrônica (Lei 14.063/2020): agência configura contrato em Settings
+- Agency.contractTemplate: texto do contrato (opcional, desativa quando vazio)
+- Onboarding.contractSignedAt/SignerName/SignerIp: registro da assinatura
+- POST /api/onboarding/[token]/sign-contract: grava nome + timestamp + IP do signatário
+- /onboarding/[token]/contract: página de leitura + assinatura (client component)
+- Layout redirect automático para /contract se não assinou (quando configurado)
+- Sidebar: etapa "Contrato" (ícone draw) exibida condicionalmente antes dos steps 1-4
+- Admin detalhe: badge verde "Assinado por [Nome] em DD/MM/YY"
+- Settings: seção "Contrato digital" com textarea + indicador de status ativo
+- Mobile: barra de progresso visual no header (cor primária) + layout mais compacto
+- Migration: 20260301220000_sprint9_contract_signature
 ```
 
 ---
@@ -251,12 +264,23 @@ MagicLink     (id, client_id, token, expires_at, used_at)
 
 | Initiative | Descrição |
 |---|---|
-| Marketplace de templates | Comprar/vender fluxos de onboarding |
-| Assinatura digital integrada | Assinar contrato no próprio portal |
+| ✅ Marketplace de templates | Comprar/vender fluxos de onboarding |
+| ✅ Assinatura digital integrada | Assinar contrato no próprio portal |
 | API pública | Agências integram com seus próprios sistemas |
-| Mobile responsivo aprimorado | Otimização para cliente que acessa pelo celular |
+| ✅ Mobile responsivo aprimorado | Otimização para cliente que acessa pelo celular |
 | ClickUp / Notion / Trello | Criar projeto automaticamente ao concluir |
 | Relatórios de performance | Cruzar dados de onboarding com resultados da campanha |
+
+### ✅ Sprint 9 — Mobile + Assinatura Digital (Semana 17-18) — CONCLUÍDO
+
+| Tarefa | Detalhes |
+|---|---|
+| ✅ Assinatura eletrônica simples | Contrato configurável + assinatura com nome/timestamp/IP |
+| ✅ Redirect automático | Layout força assinatura antes do Step 1 |
+| ✅ Sidebar condicional | Step "Contrato" aparece apenas quando configurado |
+| ✅ Mobile progress bar | Barra visual de progresso no header mobile |
+
+### Sprint 10 — API Pública + Integrações (Semana 19-20)
 
 ---
 

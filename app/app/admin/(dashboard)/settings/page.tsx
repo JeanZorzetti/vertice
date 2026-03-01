@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 interface AgencySettings {
   name: string;
@@ -25,6 +25,12 @@ export default function SettingsPage() {
   const [error, setError] = useState("");
   const colorRef = useRef<HTMLInputElement>(null);
 
+  // API Key state
+  const [hasApiKey, setHasApiKey] = useState(false);
+  const [generatingKey, setGeneratingKey] = useState(false);
+  const [newApiKey, setNewApiKey] = useState<string | null>(null);
+  const [keyCopied, setKeyCopied] = useState(false);
+
   useEffect(() => {
     fetch("/api/agency/settings")
       .then((r) => r.json())
@@ -37,7 +43,28 @@ export default function SettingsPage() {
         setWhatsappPhone(data.whatsappPhone ?? "");
         setContractTemplate(data.contractTemplate ?? "");
       });
+    fetch("/api/agency/api-key").then((r) => r.json()).then((d) => setHasApiKey(d.hasKey ?? false));
   }, []);
+
+  const handleGenerateKey = useCallback(async () => {
+    if (hasApiKey && !confirm("Isso irá revogar a chave atual. Continuar?")) return;
+    setGeneratingKey(true);
+    setNewApiKey(null);
+    const r = await fetch("/api/agency/api-key", { method: "POST" });
+    const d = await r.json();
+    if (d.key) {
+      setNewApiKey(d.key);
+      setHasApiKey(true);
+    }
+    setGeneratingKey(false);
+  }, [hasApiKey]);
+
+  const copyKey = useCallback(() => {
+    if (!newApiKey) return;
+    navigator.clipboard.writeText(newApiKey);
+    setKeyCopied(true);
+    setTimeout(() => setKeyCopied(false), 2000);
+  }, [newApiKey]);
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
@@ -211,6 +238,79 @@ export default function SettingsPage() {
                 Contrato ativo — os clientes assinarão antes de iniciar o onboarding.
               </div>
             )}
+          </div>
+        </div>
+
+        {/* API Key */}
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col gap-5">
+          <div>
+            <h2 className="text-sm font-bold text-slate-700 uppercase tracking-wide">API pública</h2>
+            <p className="text-xs text-slate-400 mt-1">
+              Use a API key para integrar com Zapier, Make, CRMs ou qualquer sistema externo.
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-3">
+            {newApiKey ? (
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-2 p-3 bg-amber-50 border border-amber-200 rounded-xl">
+                  <span className="material-symbols-outlined text-amber-600 text-[18px] shrink-0">warning</span>
+                  <p className="text-xs font-semibold text-amber-700">Copie agora — esta chave não será exibida novamente.</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    readOnly
+                    value={newApiKey}
+                    className="flex-1 h-11 rounded-xl border border-slate-200 bg-slate-50 px-3 text-xs font-mono text-slate-800 select-all"
+                  />
+                  <button
+                    type="button"
+                    onClick={copyKey}
+                    className="h-11 px-4 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-700 transition-colors shrink-0 flex items-center gap-1.5"
+                  >
+                    <span className="material-symbols-outlined text-[16px]">{keyCopied ? "check" : "content_copy"}</span>
+                    {keyCopied ? "Copiado!" : "Copiar"}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-center gap-3">
+                {hasApiKey && (
+                  <div className="flex items-center gap-2 flex-1 h-11 rounded-xl border border-slate-200 bg-slate-50 px-3">
+                    <span className="material-symbols-outlined text-slate-400 text-[16px]">key</span>
+                    <span className="text-xs font-mono text-slate-500">vtx_••••••••••••••••••••••••••••••••</span>
+                  </div>
+                )}
+                <button
+                  type="button"
+                  onClick={handleGenerateKey}
+                  disabled={generatingKey}
+                  className="h-11 px-4 rounded-xl border border-slate-200 bg-white text-sm font-bold text-slate-700 hover:bg-slate-50 transition-colors disabled:opacity-60 flex items-center gap-1.5 shrink-0"
+                >
+                  <span className="material-symbols-outlined text-[16px]">key</span>
+                  {generatingKey ? "Gerando..." : hasApiKey ? "Regenerar chave" : "Gerar chave de API"}
+                </button>
+              </div>
+            )}
+
+            {/* Docs snippet */}
+            <details className="group">
+              <summary className="text-xs font-semibold text-slate-500 cursor-pointer select-none hover:text-slate-800 transition-colors list-none flex items-center gap-1">
+                <span className="material-symbols-outlined text-[14px] group-open:rotate-90 transition-transform">chevron_right</span>
+                Como usar a API
+              </summary>
+              <div className="mt-2 rounded-xl bg-slate-900 p-4 text-xs font-mono text-slate-200 overflow-x-auto leading-relaxed">
+                <p className="text-slate-500"># Listar onboardings</p>
+                <p>{`curl https://vertice.roilabs.com.br/api/v1/onboardings \\`}</p>
+                <p>{`  -H "Authorization: Bearer vtx_SUA_CHAVE"`}</p>
+                <br />
+                <p className="text-slate-500"># Criar onboarding</p>
+                <p>{`curl -X POST https://vertice.roilabs.com.br/api/v1/onboardings \\`}</p>
+                <p>{`  -H "Authorization: Bearer vtx_SUA_CHAVE" \\`}</p>
+                <p>{`  -H "Content-Type: application/json" \\`}</p>
+                <p>{`  -d '{"clientName":"Empresa XYZ","email":"contato@xyz.com"}'`}</p>
+              </div>
+            </details>
           </div>
         </div>
 

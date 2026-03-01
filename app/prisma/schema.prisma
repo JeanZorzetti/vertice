@@ -20,6 +20,7 @@ model Agency {
   mpSubscriptionStatus String?
   onboardedAt          DateTime?
   contractTemplate     String?
+  apiKeyHash           String?               @unique
   createdAt            DateTime              @default(now())
   updatedAt            DateTime              @updatedAt
   clients              Client[]
