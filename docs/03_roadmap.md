@@ -143,15 +143,18 @@ MagicLink     (id, client_id, token, expires_at, used_at)
 
 ---
 
-### Sprint 5 — White-label + Multi-agência (Semana 9-10)
+### ✅ Sprint 5 — White-label + Multi-agência (Semana 9-10) — CONCLUÍDO
 
 | Tarefa | Detalhes |
 |---|---|
-| Cadastro de agência | Signup público para novas agências |
-| White-label básico | Agência configura logo + cor primária |
-| Subdomínio por agência | cliente.agencia.vertice.app |
-| Domínio customizado | Agência aponta seu domínio para o Vértice |
-| Isolamento de dados | Garantir multitenant seguro (RLS no Postgres) |
+| Cadastro de agência | POST /api/agency/signup + /signup page pública |
+| White-label básico | /admin/settings: logo URL + cor primária com preview |
+| Portal white-label | Sidebar e header do cliente usam logo/cor da agência |
+| Admin branding | Header do admin reflete logo e cor da agência |
+| Link "Criar conta" na login | /admin/login → /signup |
+| Subdomínio por agência | Diferido — requer domínio vertice.app + wildcard DNS |
+| Domínio customizado | Diferido — Sprint 7+ |
+| Isolamento de dados | agencyId em todas as queries (multitenant por app) |
 
 ---
 

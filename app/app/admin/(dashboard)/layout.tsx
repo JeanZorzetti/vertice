@@ -11,10 +11,16 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     redirect("/admin/login");
   }
 
-  const user = await prisma.agencyUser.findUnique({
-    where: { id: session.userId },
-    select: { name: true, email: true },
-  });
+  const [user, agency] = await Promise.all([
+    prisma.agencyUser.findUnique({
+      where: { id: session.userId },
+      select: { name: true, email: true },
+    }),
+    prisma.agency.findUnique({
+      where: { id: session.agencyId },
+      select: { name: true, logoUrl: true, primaryColor: true },
+    }),
+  ]);
 
   const initials = (user?.name ?? session.email)
     .split(" ")
@@ -27,6 +33,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     <div className="min-h-screen bg-[#f6f6f8] flex flex-col">
       <AdminHeader
         agencyId={session.agencyId}
+        agencyName={agency?.name ?? "Agência"}
+        agencyLogoUrl={agency?.logoUrl ?? null}
+        primaryColor={agency?.primaryColor ?? "#135bec"}
         userName={user?.name ?? session.email}
         userEmail={user?.email ?? session.email}
         initials={initials}

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -131,6 +132,13 @@ export default function AdminLoginPage() {
               )}
             </button>
           </form>
+
+          <p className="text-center text-sm text-slate-500">
+            Ainda não tem uma conta?{" "}
+            <Link href="/signup" className="font-bold text-[#135bec] hover:underline">
+              Criar conta gratuita
+            </Link>
+          </p>
         </div>
       </div>
     </div>

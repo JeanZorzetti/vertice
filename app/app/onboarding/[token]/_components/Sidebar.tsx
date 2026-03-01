@@ -14,12 +14,21 @@ const STEP_PATHS = [
 
 interface SidebarProps {
   agencyName: string;
+  agencyLogoUrl: string | null;
+  primaryColor: string;
   clientName: string;
   token: string;
   completedSteps: number[];
 }
 
-export default function Sidebar({ agencyName, clientName, token, completedSteps }: SidebarProps) {
+export default function Sidebar({
+  agencyName,
+  agencyLogoUrl,
+  primaryColor,
+  clientName,
+  token,
+  completedSteps,
+}: SidebarProps) {
   const pathname = usePathname();
 
   function getStepStatus(index: number): "done" | "active" | "pending" {
@@ -35,10 +44,20 @@ export default function Sidebar({ agencyName, clientName, token, completedSteps 
       <div className="p-8 flex flex-col gap-10">
         {/* Logo / Agency */}
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-[#135bec] flex items-center justify-center text-white">
-            <span className="material-symbols-outlined text-2xl">change_history</span>
-          </div>
-          <h2 className="text-xl font-bold tracking-tight text-slate-900 truncate">{agencyName}</h2>
+          {agencyLogoUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={agencyLogoUrl} alt={agencyName} className="h-9 w-auto object-contain max-w-[160px]" />
+          ) : (
+            <>
+              <div
+                className="w-10 h-10 rounded-lg flex items-center justify-center text-white shrink-0"
+                style={{ backgroundColor: primaryColor }}
+              >
+                <span className="material-symbols-outlined text-2xl">change_history</span>
+              </div>
+              <h2 className="text-xl font-bold tracking-tight text-slate-900 truncate">{agencyName}</h2>
+            </>
+          )}
         </div>
 
         {/* Title */}
@@ -75,12 +94,19 @@ export default function Sidebar({ agencyName, clientName, token, completedSteps 
               return (
                 <div
                   key={label}
-                  className="flex items-center gap-3 px-3 py-3 rounded-lg bg-[#135bec]/10 border-l-4 border-[#135bec]"
+                  className="flex items-center gap-3 px-3 py-3 rounded-lg border-l-4"
+                  style={{
+                    backgroundColor: `${primaryColor}1a`,
+                    borderColor: primaryColor,
+                  }}
                 >
-                  <div className="text-[#135bec] w-6 h-6 flex items-center justify-center rounded-full bg-[#135bec]/20 text-xs font-bold shrink-0">
+                  <div
+                    className="w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold shrink-0 text-white"
+                    style={{ backgroundColor: primaryColor }}
+                  >
                     {i + 1}
                   </div>
-                  <p className="text-[#135bec] text-sm font-bold">{label}</p>
+                  <p className="text-sm font-bold" style={{ color: primaryColor }}>{label}</p>
                 </div>
               );
             }

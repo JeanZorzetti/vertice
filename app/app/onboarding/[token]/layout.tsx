@@ -3,8 +3,6 @@ import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import Sidebar from "./_components/Sidebar";
 
-// Next.js 16 layout validator generates LayoutProps with params: Promise<unknown>,
-// so we use unknown here and cast after awaiting.
 export default async function OnboardingTokenLayout({
   children,
   params,
@@ -23,7 +21,11 @@ export default async function OnboardingTokenLayout({
     where: { token },
     include: {
       client: {
-        include: { agency: { select: { name: true } } },
+        include: {
+          agency: {
+            select: { name: true, logoUrl: true, primaryColor: true },
+          },
+        },
       },
       steps: { select: { stepNumber: true } },
     },
@@ -33,12 +35,15 @@ export default async function OnboardingTokenLayout({
     redirect("/login");
   }
 
+  const { agency } = onboarding.client;
   const completedSteps = onboarding.steps.map((s) => s.stepNumber);
 
   return (
     <div className="relative flex min-h-screen w-full overflow-x-hidden bg-[#f6f6f8] font-sans text-slate-900 antialiased">
       <Sidebar
-        agencyName={onboarding.client.agency.name}
+        agencyName={agency.name}
+        agencyLogoUrl={agency.logoUrl ?? null}
+        primaryColor={agency.primaryColor}
         clientName={onboarding.client.name}
         token={token}
         completedSteps={completedSteps}
@@ -48,10 +53,20 @@ export default async function OnboardingTokenLayout({
         {/* Mobile Header */}
         <div className="lg:hidden flex items-center justify-between p-4 bg-white border-b border-slate-200 sticky top-0 z-10">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded bg-[#135bec] flex items-center justify-center text-white">
-              <span className="material-symbols-outlined text-lg">change_history</span>
-            </div>
-            <span className="font-bold text-slate-900">{onboarding.client.agency.name}</span>
+            {agency.logoUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={agency.logoUrl} alt={agency.name} className="h-8 w-auto object-contain max-w-[120px]" />
+            ) : (
+              <>
+                <div
+                  className="w-8 h-8 rounded flex items-center justify-center text-white"
+                  style={{ backgroundColor: agency.primaryColor }}
+                >
+                  <span className="material-symbols-outlined text-lg">change_history</span>
+                </div>
+                <span className="font-bold text-slate-900">{agency.name}</span>
+              </>
+            )}
           </div>
           <span className="text-sm text-slate-500 font-medium">
             {completedSteps.length}/4 concluídos
