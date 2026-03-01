@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAgencySession } from "@/lib/auth";
 import { randomUUID } from "crypto";
+import { sendWhatsAppText } from "@/lib/evolution";
+import { fireWebhook } from "@/lib/webhook";
+import { createOnboardingFolder } from "@/lib/google-drive";
 
 // GET /api/agency/onboardings
 // Lists all onboardings for the agency with client info and progress.
@@ -60,6 +63,14 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    // Create Google Drive folder (non-blocking — don't fail onboarding if Drive is down)
+    let driveFolderId: string | null = null;
+    try {
+      driveFolderId = await createOnboardingFolder(clientName, company ?? null);
+    } catch (err) {
+      console.error("[google-drive] folder creation failed:", err);
+    }
+
     // Create onboarding
     const onboarding = await prisma.onboarding.create({
       data: {
@@ -67,11 +78,34 @@ export async function POST(request: NextRequest) {
         token: randomUUID(),
         status: "PENDING",
         currentStep: 1,
+        driveFolderId,
       },
       include: {
         client: { select: { name: true, email: true, company: true } },
       },
     });
+
+    // Fire notifications (non-blocking)
+    const agency = await prisma.agency.findUnique({
+      where: { id: session.agencyId },
+      select: { name: true, webhookUrl: true, whatsappPhone: true },
+    });
+
+    if (agency) {
+      fireWebhook(agency.webhookUrl, "onboarding.created", {
+        onboardingId: onboarding.id,
+        clientName: client.name,
+        clientEmail: normalized,
+        company: client.company,
+      }).catch((err) => console.error("[webhook onboarding.created]", err));
+
+      if (agency.whatsappPhone) {
+        sendWhatsAppText(
+          agency.whatsappPhone,
+          `🆕 Novo onboarding criado!\nCliente: ${client.name} (${normalized})${client.company ? `\nEmpresa: ${client.company}` : ""}`
+        ).catch((err) => console.error("[whatsapp onboarding.created]", err));
+      }
+    }
 
     return NextResponse.json(onboarding, { status: 201 });
   } catch (err: unknown) {

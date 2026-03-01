@@ -90,6 +90,72 @@ export async function sendOnboardingCompletedEmail({
   });
 }
 
+export async function sendChaseEmail({
+  to,
+  clientName,
+  agencyName,
+  magicUrl,
+}: {
+  to: string;
+  clientName: string;
+  agencyName: string;
+  magicUrl: string;
+}): Promise<void> {
+  await getResend().emails.send({
+    from: FROM_EMAIL,
+    to,
+    subject: `Lembrete: finalize seu onboarding com ${agencyName}`,
+    html: `
+      <!DOCTYPE html>
+      <html lang="pt-BR">
+      <head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /></head>
+      <body style="margin:0;padding:0;background:#f6f6f8;font-family:'Segoe UI',sans-serif;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background:#f6f6f8;padding:40px 0;">
+          <tr><td align="center">
+            <table width="580" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:16px;border:1px solid #e7ebf3;overflow:hidden;">
+              <tr>
+                <td style="background:#135bec;padding:32px 40px;text-align:center;">
+                  <span style="color:#ffffff;font-size:22px;font-weight:800;letter-spacing:-0.5px;">Vértice</span>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:40px;">
+                  <p style="margin:0 0 8px;font-size:14px;color:#4c669a;">Olá, ${clientName} 👋</p>
+                  <h1 style="margin:0 0 16px;font-size:26px;font-weight:800;color:#0d121b;line-height:1.2;">
+                    Seu onboarding ainda está pendente
+                  </h1>
+                  <p style="margin:0 0 32px;font-size:15px;color:#4c669a;line-height:1.6;">
+                    A equipe da <strong style="color:#0d121b;">${agencyName}</strong> está aguardando as suas informações para dar início ao trabalho. Leva menos de 10 minutos para concluir!
+                  </p>
+                  <table cellpadding="0" cellspacing="0" style="margin:0 auto 32px;">
+                    <tr>
+                      <td style="background:#135bec;border-radius:10px;padding:0;">
+                        <a href="${magicUrl}" style="display:inline-block;padding:16px 36px;color:#ffffff;font-size:15px;font-weight:700;text-decoration:none;">
+                          Continuar Onboarding →
+                        </a>
+                      </td>
+                    </tr>
+                  </table>
+                  <p style="margin:0;font-size:12px;color:#a0a9bb;text-align:center;">
+                    Link expira em 24 horas. Se precisar de ajuda, responda este e-mail.<br/>
+                    Link alternativo: <a href="${magicUrl}" style="color:#135bec;">${magicUrl}</a>
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:20px 40px;border-top:1px solid #e7ebf3;text-align:center;">
+                  <p style="margin:0;font-size:12px;color:#a0a9bb;">© 2025 Vértice · Powered by ROI Labs</p>
+                </td>
+              </tr>
+            </table>
+          </td></tr>
+        </table>
+      </body>
+      </html>
+    `,
+  });
+}
+
 export async function sendMagicLink({
   to,
   token,

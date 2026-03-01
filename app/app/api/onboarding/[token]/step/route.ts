@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireClientSession } from "@/lib/auth";
 import { sendOnboardingCompletedEmail } from "@/lib/resend";
+import { sendWhatsAppText } from "@/lib/evolution";
+import { fireWebhook } from "@/lib/webhook";
 
 // PUT /api/onboarding/[token]/step
 // Body: { stepNumber: number; data: Record<string, unknown> }
@@ -60,7 +62,7 @@ export async function PUT(
       },
     });
 
-    // Fire completion email when all steps are done (non-blocking)
+    // Fire completion notifications when all steps are done (non-blocking)
     if (allStepsDone) {
       const full = await prisma.onboarding.findUnique({
         where: { id: onboarding.id },
@@ -68,7 +70,12 @@ export async function PUT(
           client: {
             include: {
               agency: {
-                include: { users: { where: { role: "admin" }, select: { email: true } } },
+                select: {
+                  name: true,
+                  webhookUrl: true,
+                  whatsappPhone: true,
+                  users: { where: { role: "admin" }, select: { email: true } },
+                },
               },
             },
           },
@@ -77,6 +84,7 @@ export async function PUT(
 
       if (full) {
         const adminEmails = full.client.agency.users.map((u) => u.email);
+
         sendOnboardingCompletedEmail({
           to: adminEmails,
           clientName: full.client.name,
@@ -85,6 +93,21 @@ export async function PUT(
           agencyName: full.client.agency.name,
           onboardingId: full.id,
         }).catch((err) => console.error("[completion email]", err));
+
+        fireWebhook(full.client.agency.webhookUrl, "onboarding.completed", {
+          onboardingId: full.id,
+          clientName: full.client.name,
+          clientEmail: full.client.email,
+          company: full.client.company,
+          completedAt: full.completedAt,
+        }).catch((err) => console.error("[webhook onboarding.completed]", err));
+
+        if (full.client.agency.whatsappPhone) {
+          sendWhatsAppText(
+            full.client.agency.whatsappPhone,
+            `✅ Onboarding concluído!\n${full.client.name}${full.client.company ? ` (${full.client.company})` : ""} finalizou todas as etapas.`
+          ).catch((err) => console.error("[whatsapp completion]", err));
+        }
       }
     }
 

@@ -1,0 +1,24 @@
+name: Auto-Chase Stalled Onboardings
+
+on:
+  schedule:
+    # Runs at 09:00 BRT (12:00 UTC) every day
+    - cron: "0 12 * * *"
+  workflow_dispatch: # Allow manual trigger from GitHub UI
+
+jobs:
+  auto-chase:
+    name: Chase stalled onboardings
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call auto-chase endpoint
+        run: |
+          response=$(curl -s -o /dev/null -w "%{http_code}" \
+            -X GET "${{ vars.APP_URL }}/api/cron/auto-chase" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}")
+          echo "HTTP status: $response"
+          if [ "$response" != "200" ]; then
+            echo "❌ Auto-chase failed with status $response"
+            exit 1
+          fi
+          echo "✅ Auto-chase completed successfully"

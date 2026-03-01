@@ -7,15 +7,17 @@ datasource db {
 }
 
 model Agency {
-  id           String       @id @default(cuid())
-  name         String
-  slug         String       @unique
-  logoUrl      String?
-  primaryColor String       @default("#135bec")
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
-  clients      Client[]
-  users        AgencyUser[]
+  id             String       @id @default(cuid())
+  name           String
+  slug           String       @unique
+  logoUrl        String?
+  primaryColor   String       @default("#135bec")
+  webhookUrl     String?
+  whatsappPhone  String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  clients        Client[]
+  users          AgencyUser[]
 }
 
 model AgencyUser {
@@ -46,14 +48,16 @@ model Client {
 }
 
 model Onboarding {
-  id          String           @id @default(cuid())
-  clientId    String
-  token       String           @unique @default(cuid())
-  status      OnboardingStatus @default(PENDING)
-  currentStep Int              @default(0)
-  completedAt DateTime?
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
+  id            String           @id @default(cuid())
+  clientId      String
+  token         String           @unique @default(cuid())
+  status        OnboardingStatus @default(PENDING)
+  currentStep   Int              @default(0)
+  completedAt   DateTime?
+  lastChasedAt  DateTime?
+  driveFolderId String?
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
   client      Client           @relation(fields: [clientId], references: [id], onDelete: Cascade)
   steps       OnboardingStep[]
   magicLinks  MagicLink[]

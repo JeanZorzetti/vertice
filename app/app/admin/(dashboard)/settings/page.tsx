@@ -7,6 +7,8 @@ interface AgencySettings {
   slug: string;
   logoUrl: string | null;
   primaryColor: string;
+  webhookUrl: string | null;
+  whatsappPhone: string | null;
 }
 
 export default function SettingsPage() {
@@ -14,6 +16,8 @@ export default function SettingsPage() {
   const [name, setName] = useState("");
   const [logoUrl, setLogoUrl] = useState("");
   const [primaryColor, setPrimaryColor] = useState("#135bec");
+  const [webhookUrl, setWebhookUrl] = useState("");
+  const [whatsappPhone, setWhatsappPhone] = useState("");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
@@ -27,6 +31,8 @@ export default function SettingsPage() {
         setName(data.name);
         setLogoUrl(data.logoUrl ?? "");
         setPrimaryColor(data.primaryColor);
+        setWebhookUrl(data.webhookUrl ?? "");
+        setWhatsappPhone(data.whatsappPhone ?? "");
       });
   }, []);
 
@@ -39,7 +45,7 @@ export default function SettingsPage() {
     const res = await fetch("/api/agency/settings", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, logoUrl, primaryColor }),
+      body: JSON.stringify({ name, logoUrl, primaryColor, webhookUrl, whatsappPhone }),
     });
 
     if (!res.ok) {
@@ -171,6 +177,47 @@ export default function SettingsPage() {
             >
               Acessar Portal →
             </button>
+          </div>
+        </div>
+
+        {/* Automations */}
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col gap-5">
+          <h2 className="text-sm font-bold text-slate-700 uppercase tracking-wide">Automações</h2>
+
+          <div className="flex flex-col gap-2">
+            <label htmlFor="whatsappPhone" className="text-sm font-bold text-slate-700">
+              WhatsApp da agência{" "}
+              <span className="font-normal text-slate-400">(notificações para a equipe)</span>
+            </label>
+            <input
+              id="whatsappPhone"
+              type="tel"
+              value={whatsappPhone}
+              onChange={(e) => setWhatsappPhone(e.target.value)}
+              placeholder="11999999999"
+              className="h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#135bec] focus:border-transparent transition"
+            />
+            <p className="text-xs text-slate-400">
+              Apenas números (DDD + número). Exemplo: 11999999999
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label htmlFor="webhookUrl" className="text-sm font-bold text-slate-700">
+              Webhook URL{" "}
+              <span className="font-normal text-slate-400">(opcional)</span>
+            </label>
+            <input
+              id="webhookUrl"
+              type="url"
+              value={webhookUrl}
+              onChange={(e) => setWebhookUrl(e.target.value)}
+              placeholder="https://hooks.zapier.com/hooks/catch/..."
+              className="h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#135bec] focus:border-transparent transition"
+            />
+            <p className="text-xs text-slate-400">
+              Receba um POST JSON nos eventos: <code className="bg-slate-100 px-1 rounded">onboarding.created</code>, <code className="bg-slate-100 px-1 rounded">onboarding.completed</code>
+            </p>
           </div>
         </div>
 

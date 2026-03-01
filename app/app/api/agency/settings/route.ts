@@ -8,7 +8,7 @@ export async function GET() {
     const session = await requireAgencySession();
     const agency = await prisma.agency.findUnique({
       where: { id: session.agencyId },
-      select: { name: true, slug: true, logoUrl: true, primaryColor: true },
+      select: { name: true, slug: true, logoUrl: true, primaryColor: true, webhookUrl: true, whatsappPhone: true },
     });
     if (!agency) return NextResponse.json({ error: "Agência não encontrada." }, { status: 404 });
     return NextResponse.json(agency);
@@ -18,11 +18,11 @@ export async function GET() {
 }
 
 // PUT /api/agency/settings
-// Body: { name, logoUrl, primaryColor }
+// Body: { name, logoUrl, primaryColor, webhookUrl?, whatsappPhone? }
 export async function PUT(request: NextRequest) {
   try {
     const session = await requireAgencySession();
-    const { name, logoUrl, primaryColor } = await request.json();
+    const { name, logoUrl, primaryColor, webhookUrl, whatsappPhone } = await request.json();
 
     if (!name?.trim()) {
       return NextResponse.json({ error: "Nome é obrigatório." }, { status: 400 });
@@ -38,8 +38,10 @@ export async function PUT(request: NextRequest) {
         name: String(name).trim(),
         logoUrl: logoUrl?.trim() || null,
         primaryColor: color,
+        webhookUrl: webhookUrl?.trim() || null,
+        whatsappPhone: whatsappPhone?.trim() || null,
       },
-      select: { name: true, slug: true, logoUrl: true, primaryColor: true },
+      select: { name: true, slug: true, logoUrl: true, primaryColor: true, webhookUrl: true, whatsappPhone: true },
     });
 
     return NextResponse.json(agency);
