@@ -71,6 +71,19 @@
 - /admin/settings: seção Automações (WhatsApp da agência + Webhook URL)
 - .github/workflows/auto-chase.yml: cron diário 09:00 BRT via GitHub Actions
 - Schema: Agency.webhookUrl, Agency.whatsappPhone, Onboarding.lastChasedAt, Onboarding.driveFolderId
+
+✅ FASE 2 — Sprint 7 (CONCLUÍDO)
+- lib/claude.ts: analyzeBriefing() → relatório markdown via claude-sonnet-4-6
+- POST /api/agency/onboardings/[id]/analyze: chama Claude e persiste aiAnalysis
+- GET /api/agency/analytics: KPIs (clientes, status, taxa conclusão, tempo médio, série diária 30d)
+- CRUD /api/agency/templates: templates reutilizáveis de onboarding por agência
+- GET /api/agency/onboardings/[id]/report: HTML imprimível (PDF via browser print)
+- /admin/analytics: dashboard com 4 KPIs + gráfico de barras + breakdown status + tabela
+- /admin/templates: lista + criação/exclusão de templates
+- /admin/onboardings/[id]: painel "Análise com IA" inline + link "Exportar relatório"
+- AdminHeader: links Analytics e Templates na navegação
+- Schema: Onboarding.aiAnalysis, modelo OnboardingTemplate
+- Migration: 20260301180817_sprint7_ai_analytics_templates
 ```
 
 ---
@@ -191,14 +204,14 @@ MagicLink     (id, client_id, token, expires_at, used_at)
 
 ---
 
-### Sprint 7 — IA e Analytics (Semana 13-14)
+### ✅ Sprint 7 — IA e Analytics (Semana 13-14) — CONCLUÍDO
 
 | Tarefa | Detalhes |
 |---|---|
-| Análise de briefing por IA | Claude API: briefing → documento de marca |
-| Dashboard de analytics | Taxa de conclusão, tempo médio, abandono por step |
-| Templates de onboarding | Agência salva e reutiliza fluxos |
-| Exportar relatório do cliente | PDF com todos os dados coletados |
+| ✅ Análise de briefing por IA | Claude API: briefing → documento de marca |
+| ✅ Dashboard de analytics | Taxa de conclusão, tempo médio, abandono por step |
+| ✅ Templates de onboarding | Agência salva e reutiliza fluxos |
+| ✅ Exportar relatório do cliente | HTML imprimível → PDF via browser |
 
 ---
 

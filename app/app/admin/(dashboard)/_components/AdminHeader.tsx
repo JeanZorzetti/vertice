@@ -70,6 +70,12 @@ export default function AdminHeader({
           Templates
         </Link>
         <Link
+          href="/admin/billing"
+          className="px-3 py-1.5 text-sm font-semibold text-slate-600 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
+        >
+          Plano
+        </Link>
+        <Link
           href="/admin/settings"
           className="px-3 py-1.5 text-sm font-semibold text-slate-600 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
         >

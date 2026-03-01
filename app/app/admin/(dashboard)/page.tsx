@@ -3,6 +3,7 @@ import { requireAgencySession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import NewOnboardingButton from "./_components/NewOnboardingButton";
+import OnboardingTour from "./_components/OnboardingTour";
 
 const STATUS_LABEL: Record<string, string> = {
   PENDING: "Pendente",
@@ -34,7 +35,7 @@ export default async function AdminPage() {
   const now = new Date();
   const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
-  const [onboardings, totalClients, inProgress, pending, completedMonth] = await Promise.all([
+  const [onboardings, totalClients, inProgress, pending, completedMonth, agencyData] = await Promise.all([
     prisma.onboarding.findMany({
       where: { client: { agencyId: session.agencyId } },
       orderBy: { createdAt: "desc" },
@@ -58,6 +59,10 @@ export default async function AdminPage() {
         completedAt: { gte: firstOfMonth },
       },
     }),
+    prisma.agency.findUnique({
+      where: { id: session.agencyId },
+      select: { name: true, onboardedAt: true },
+    }),
   ]);
 
   const metrics = [
@@ -67,8 +72,13 @@ export default async function AdminPage() {
     { label: "Concluídos este mês", value: completedMonth, icon: "task_alt" },
   ];
 
+  const showTour = !agencyData?.onboardedAt;
+
   return (
     <div className="flex-1 flex flex-col gap-8 p-6 md:p-8 max-w-7xl mx-auto w-full">
+      {/* Guided tour — shown only on first login */}
+      {showTour && <OnboardingTour agencyName={agencyData?.name ?? "Agência"} />}
+
       {/* Page header */}
       <div className="flex items-center justify-between gap-4">
         <div className="flex flex-col gap-1">
