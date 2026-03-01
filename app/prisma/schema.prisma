@@ -19,6 +19,7 @@ model Agency {
   mpSubscriptionId     String?               @unique
   mpSubscriptionStatus String?
   onboardedAt          DateTime?
+  contractTemplate     String?
   createdAt            DateTime              @default(now())
   updatedAt            DateTime              @updatedAt
   clients              Client[]
@@ -62,8 +63,11 @@ model Onboarding {
   completedAt   DateTime?
   lastChasedAt  DateTime?
   driveFolderId String?
-  aiAnalysis    String?
-  createdAt     DateTime         @default(now())
+  aiAnalysis          String?
+  contractSignedAt    DateTime?
+  contractSignerName  String?
+  contractSignerIp    String?
+  createdAt           DateTime         @default(now())
   updatedAt     DateTime         @updatedAt
   client      Client           @relation(fields: [clientId], references: [id], onDelete: Cascade)
   steps       OnboardingStep[]

@@ -23,7 +23,7 @@ export async function GET(
             name: true,
             email: true,
             company: true,
-            agency: { select: { name: true, logoUrl: true, primaryColor: true } },
+            agency: { select: { name: true, logoUrl: true, primaryColor: true, contractTemplate: true } },
           },
         },
       },

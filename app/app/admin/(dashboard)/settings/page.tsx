@@ -9,6 +9,7 @@ interface AgencySettings {
   primaryColor: string;
   webhookUrl: string | null;
   whatsappPhone: string | null;
+  contractTemplate: string | null;
 }
 
 export default function SettingsPage() {
@@ -18,6 +19,7 @@ export default function SettingsPage() {
   const [primaryColor, setPrimaryColor] = useState("#135bec");
   const [webhookUrl, setWebhookUrl] = useState("");
   const [whatsappPhone, setWhatsappPhone] = useState("");
+  const [contractTemplate, setContractTemplate] = useState("");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
@@ -33,6 +35,7 @@ export default function SettingsPage() {
         setPrimaryColor(data.primaryColor);
         setWebhookUrl(data.webhookUrl ?? "");
         setWhatsappPhone(data.whatsappPhone ?? "");
+        setContractTemplate(data.contractTemplate ?? "");
       });
   }, []);
 
@@ -45,7 +48,7 @@ export default function SettingsPage() {
     const res = await fetch("/api/agency/settings", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, logoUrl, primaryColor, webhookUrl, whatsappPhone }),
+      body: JSON.stringify({ name, logoUrl, primaryColor, webhookUrl, whatsappPhone, contractTemplate }),
     });
 
     if (!res.ok) {
@@ -177,6 +180,37 @@ export default function SettingsPage() {
             >
               Acessar Portal →
             </button>
+          </div>
+        </div>
+
+        {/* Contract */}
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col gap-5">
+          <div>
+            <h2 className="text-sm font-bold text-slate-700 uppercase tracking-wide">Contrato digital</h2>
+            <p className="text-xs text-slate-400 mt-1">
+              Se preenchido, o cliente lerá e assinará o contrato antes de iniciar o onboarding. Assinatura eletrônica simples (Lei 14.063/2020).
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label htmlFor="contractTemplate" className="text-sm font-bold text-slate-700">
+              Texto do contrato{" "}
+              <span className="font-normal text-slate-400">(deixe em branco para desativar)</span>
+            </label>
+            <textarea
+              id="contractTemplate"
+              rows={10}
+              value={contractTemplate}
+              onChange={(e) => setContractTemplate(e.target.value)}
+              placeholder={"CONTRATO DE PRESTAÇÃO DE SERVIÇOS\n\nEntre [NOME DA AGÊNCIA] e o CONTRATANTE acima identificado...\n\nCláusula 1ª — ..."}
+              className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#135bec] focus:border-transparent transition resize-y font-mono leading-relaxed"
+            />
+            {contractTemplate && (
+              <div className="flex items-center gap-1.5 text-xs text-emerald-600 font-medium">
+                <span className="material-symbols-outlined text-[14px]" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+                Contrato ativo — os clientes assinarão antes de iniciar o onboarding.
+              </div>
+            )}
           </div>
         </div>
 

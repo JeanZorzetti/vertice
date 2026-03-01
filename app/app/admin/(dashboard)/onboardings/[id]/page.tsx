@@ -89,6 +89,9 @@ export default async function OnboardingDetailPage({
     }))
   );
 
+  const contractSignedAt = onboarding.contractSignedAt;
+  const contractSignerName = onboarding.contractSignerName;
+
   const step1 = onboarding.steps.find((s) => s.stepNumber === 1);
   const step4 = onboarding.steps.find((s) => s.stepNumber === 4);
   const step1Data = (step1?.data ?? {}) as Record<string, unknown>;
@@ -161,6 +164,20 @@ export default async function OnboardingDetailPage({
           <SendLinkButton clientEmail={onboarding.client.email} />
         </div>
       </div>
+
+      {/* Contract signature status */}
+      {contractSignedAt && (
+        <div className="bg-emerald-50 border border-emerald-200 rounded-xl px-5 py-4 flex items-center gap-3">
+          <span className="material-symbols-outlined text-emerald-600 text-[20px] shrink-0" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
+          <div>
+            <p className="text-sm font-bold text-emerald-800">Contrato assinado eletronicamente</p>
+            <p className="text-xs text-emerald-700 mt-0.5">
+              Assinado por <strong>{contractSignerName}</strong> em{" "}
+              {new Date(contractSignedAt).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" })}
+            </p>
+          </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main data — left 2/3 */}
