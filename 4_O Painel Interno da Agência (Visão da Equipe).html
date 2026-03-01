@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Vértice Admin: Onboarding Tracker</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                        "text-primary": "#0d121b",
+                        "text-secondary": "#4c669a",
+                        "border-color": "#e7ebf3",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "body": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-body antialiased text-text-primary dark:text-slate-100 min-h-screen flex flex-col">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Header -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-border-color bg-white dark:bg-[#1a2234] dark:border-[#2a3447] px-8 py-4 sticky top-0 z-50">
+<div class="flex items-center gap-4">
+<div class="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-white">
+<span class="material-symbols-outlined text-[20px]">admin_panel_settings</span>
+</div>
+<h2 class="text-text-primary dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">Vértice Admin</h2>
+</div>
+<!-- Centered Search -->
+<div class="hidden md:flex flex-1 max-w-[480px] px-8">
+<label class="flex w-full items-center gap-2 rounded-lg bg-background-light dark:bg-[#0d121b] border border-transparent focus-within:border-primary/50 transition-colors h-10 px-3">
+<span class="material-symbols-outlined text-text-secondary text-[20px]">search</span>
+<input class="w-full bg-transparent text-sm text-text-primary dark:text-white placeholder:text-text-secondary focus:outline-none" placeholder="Search clients, campaigns..."/>
+</label>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-background-light dark:bg-[#0d121b] text-text-primary dark:text-white hover:bg-slate-200 dark:hover:bg-[#252f42] transition-colors relative">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-2.5 right-2.5 h-2 w-2 rounded-full bg-red-500 ring-2 ring-white dark:ring-[#0d121b]"></span>
+</button>
+<div class="h-10 w-10 overflow-hidden rounded-full border border-border-color dark:border-[#2a3447]" data-alt="User profile avatar of a smiling man" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBVmfvhZIWXkCCyH2Wi2qscylXWshae3BSyVRL59C171VE3Lg70doJ4_WDVYR8WqX2MWoYM19kCf3vllmExNkf-P5Z-O8pJy-kkRuigaqxYYLLkvBg4n-LN_U0LI5COm0Nq3F1L-LtuPwpEciZJhCiqZKJvrAdD2YnO8ECUW_yTSFJ4EkTYx0deXXcYI2tIMdSDR7AhugKKppXTBF2_CqqqAE54D1IvNpxyyhkGHpFipN1OgPBkOATnpMMU6tGVSKTa8X--7MxJnw'); background-size: cover;">
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 px-4 py-8 md:px-8 lg:px-40">
+<div class="mx-auto max-w-[1200px] flex flex-col gap-8">
+<!-- Page Header -->
+<div class="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+<div class="flex flex-col gap-1">
+<h1 class="text-3xl font-black text-text-primary dark:text-white tracking-tight">Client Onboarding</h1>
+<p class="text-text-secondary dark:text-slate-400">Manage new client setups and track progress.</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 rounded-lg bg-white dark:bg-[#1a2234] border border-border-color dark:border-[#2a3447] px-4 py-2 text-sm font-medium text-text-primary dark:text-white hover:bg-slate-50 dark:hover:bg-[#252f42] transition-colors">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+                            Filter
+                        </button>
+<button class="flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary/90 transition-colors shadow-sm shadow-primary/30">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                            Add Client
+                        </button>
+</div>
+</div>
+<!-- Metrics Summary (Optional for context) -->
+<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+<div class="flex flex-col gap-1 rounded-xl border border-border-color dark:border-[#2a3447] bg-white dark:bg-[#1a2234] p-5 shadow-sm">
+<span class="text-sm font-medium text-text-secondary dark:text-slate-400">Total Clients</span>
+<div class="flex items-baseline gap-2">
+<span class="text-2xl font-bold text-text-primary dark:text-white">24</span>
+<span class="text-xs font-medium text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 px-1.5 py-0.5 rounded">+12%</span>
+</div>
+</div>
+<div class="flex flex-col gap-1 rounded-xl border border-border-color dark:border-[#2a3447] bg-white dark:bg-[#1a2234] p-5 shadow-sm">
+<span class="text-sm font-medium text-text-secondary dark:text-slate-400">In Progress</span>
+<div class="flex items-baseline gap-2">
+<span class="text-2xl font-bold text-text-primary dark:text-white">8</span>
+</div>
+</div>
+<div class="flex flex-col gap-1 rounded-xl border border-border-color dark:border-[#2a3447] bg-white dark:bg-[#1a2234] p-5 shadow-sm">
+<span class="text-sm font-medium text-text-secondary dark:text-slate-400">Pending Actions</span>
+<div class="flex items-baseline gap-2">
+<span class="text-2xl font-bold text-text-primary dark:text-white">3</span>
+<span class="text-xs font-medium text-amber-600 bg-amber-50 dark:bg-amber-900/30 px-1.5 py-0.5 rounded">High Priority</span>
+</div>
+</div>
+<div class="flex flex-col gap-1 rounded-xl border border-border-color dark:border-[#2a3447] bg-white dark:bg-[#1a2234] p-5 shadow-sm">
+<span class="text-sm font-medium text-text-secondary dark:text-slate-400">Completed (Mo.)</span>
+<div class="flex items-baseline gap-2">
+<span class="text-2xl font-bold text-text-primary dark:text-white">12</span>
+</div>
+</div>
+</div>
+<!-- Table Container -->
+<div class="w-full overflow-hidden rounded-xl border border-border-color dark:border-[#2a3447] bg-white dark:bg-[#1a2234] shadow-sm">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-border-color dark:border-[#2a3447] bg-background-light/50 dark:bg-[#1e273b]">
+<th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-text-secondary dark:text-slate-400 w-[250px]">Client Name</th>
+<th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-text-secondary dark:text-slate-400">Company</th>
+<th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-text-secondary dark:text-slate-400">Status</th>
+<th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-text-secondary dark:text-slate-400">Current Step</th>
+<th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-text-secondary dark:text-slate-400 w-[100px] text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-border-color dark:divide-[#2a3447]">
+<!-- Row 1 -->
+<tr class="group hover:bg-background-light dark:hover:bg-[#1e273b] transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 flex-shrink-0 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700" data-alt="Portrait of a young man with a beard" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCt7haHeUckfKYFYKA6oWHQRfpr0LR8nej_ie-S69WJqgC9IFV5JoFZpQKAAfI2xIJarrnp3_yZseiIBx4DiY2t1B-y7xUvLzZEPVmPwhgkN_eri6rHO9Oqo3bopj_pGAstRLg7fa7BuPnSKJGW5RFEYs34fR2yB5K5HX3jqFx7bJgSdZT8JoYJAjPQdU0KkJ6E1AYHXz5Lwyd6DrglGfLzwzjVX1TqkrOv13ZEnOjzOyTi2sJYyc--0r5W_9Mm3YHA5TchcUW3Rw'); background-size: cover;"></div>
+<div class="flex flex-col">
+<span class="font-medium text-text-primary dark:text-white">Marcus Chen</span>
+<span class="text-xs text-text-secondary dark:text-slate-400">marcus@technova.io</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-sm text-text-primary dark:text-slate-200">TechNova Systems</span>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-amber-100 dark:bg-amber-900/40 px-2.5 py-0.5 text-xs font-medium text-amber-800 dark:text-amber-200">
+                                            Pending
+                                        </span>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col gap-1">
+<span class="text-sm text-text-primary dark:text-slate-200">Brand Assets</span>
+<div class="h-1.5 w-full max-w-[120px] rounded-full bg-slate-100 dark:bg-slate-800">
+<div class="h-1.5 w-[20%] rounded-full bg-primary"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="rounded-lg p-2 text-text-secondary hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="group hover:bg-background-light dark:hover:bg-[#1e273b] transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 flex-shrink-0 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700" data-alt="Portrait of a smiling woman" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBEnHW6GUJJJcogo1Z8yzVKO5kIffXrdOhH-wj2f0-sVH6HgXRm5gq9m5vbm5dEBa_SnX7YYKgm-7f3rqT8cXpKxJzL6x9NgAFQubFLKtV_i4AID02nNEOyu72urA_kCQ9Xz1i6n3AjTlYL7FpTNp7XWdT9L-a_GgnVknVL2TM-Gcea7lpNV6ZV2pRV9D8qC4S2PFxRTCRI0CMfYRgrQLF4674kK-AM1BM-Wz7HTmNlA3kEQ1vM1Q2GN9vKmYqdBiSiFbdvlU3Psg'); background-size: cover;"></div>
+<div class="flex flex-col">
+<span class="font-medium text-text-primary dark:text-white">Sarah Miller</span>
+<span class="text-xs text-text-secondary dark:text-slate-400">s.miller@greenleaf.co</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-sm text-text-primary dark:text-slate-200">GreenLeaf Organics</span>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-sky-100 dark:bg-sky-900/40 px-2.5 py-0.5 text-xs font-medium text-sky-800 dark:text-sky-200">
+                                            In Progress
+                                        </span>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col gap-1">
+<span class="text-sm text-text-primary dark:text-slate-200">Platform Access</span>
+<div class="h-1.5 w-full max-w-[120px] rounded-full bg-slate-100 dark:bg-slate-800">
+<div class="h-1.5 w-[65%] rounded-full bg-primary"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="rounded-lg p-2 text-text-secondary hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="group hover:bg-background-light dark:hover:bg-[#1e273b] transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 flex-shrink-0 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700" data-alt="Portrait of a serious man with glasses" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCYdySVTRzfNLQnuk8Ipv14guZhAj9jWXsXGRAcPCRwWFY1Nh1zyYZXmacWKhS2xLQmlMEY0Xp-FEUj73L2hAvwB7kDm4WPeuSjrjhO-1rgBOffYvqAlAnGrLBsUBI28NLU1vwWm785lapF3Bd3HTOz-ZSq4Jxk1l9ZON4DHfmD1pRlsNjZeHzbOdBqJ5_yYrodc3bCfbXLMI4Y1P10-U-bT5ii6Al7uq1wY1DErPWhSHiKFnvXb7Avi1gAdFehEl2foEeL8lnC4g'); background-size: cover;"></div>
+<div class="flex flex-col">
+<span class="font-medium text-text-primary dark:text-white">David Kim</span>
+<span class="text-xs text-text-secondary dark:text-slate-400">david@solaris.energy</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-sm text-text-primary dark:text-slate-200">Solaris Energy</span>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-emerald-100 dark:bg-emerald-900/40 px-2.5 py-0.5 text-xs font-medium text-emerald-800 dark:text-emerald-200">
+                                            Completed
+                                        </span>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col gap-1">
+<span class="text-sm text-text-primary dark:text-slate-200">Final Review</span>
+<div class="h-1.5 w-full max-w-[120px] rounded-full bg-slate-100 dark:bg-slate-800">
+<div class="h-1.5 w-[100%] rounded-full bg-emerald-500"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="rounded-lg p-2 text-text-secondary hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="group hover:bg-background-light dark:hover:bg-[#1e273b] transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 flex-shrink-0 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700" data-alt="Portrait of a man with stubble" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBHnrCXVFQenqES9Fsq4TW7w1Td0pFWqD-9Ma4HrTYI78QEHdZ8T5Rm8yMOJPlygngs1sRBKgcgs5UQpy13vbK6EDZDcjLyxxlwvSLqqDaA2FNGJzP9GDf4JA6zxedLFW_6p-BOdEaf1PHZ4sqhjKet8EYidpXG04PwTj8rrnQ7R8NG9Tav_3Lpy_fDENO3umVzbe_csbFZJ1WswxQWmOsqJzwdmSVB4RmYk1eeKBMm8XsKU6hl4jW3pQaSi_C_XhgxZlG8-EJVRQ'); background-size: cover;"></div>
+<div class="flex flex-col">
+<span class="font-medium text-text-primary dark:text-white">James Wilson</span>
+<span class="text-xs text-text-secondary dark:text-slate-400">admin@constructco.com</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-sm text-text-primary dark:text-slate-200">ConstructCo</span>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-sky-100 dark:bg-sky-900/40 px-2.5 py-0.5 text-xs font-medium text-sky-800 dark:text-sky-200">
+                                            In Progress
+                                        </span>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col gap-1">
+<span class="text-sm text-text-primary dark:text-slate-200">Strategy Call</span>
+<div class="h-1.5 w-full max-w-[120px] rounded-full bg-slate-100 dark:bg-slate-800">
+<div class="h-1.5 w-[45%] rounded-full bg-primary"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="rounded-lg p-2 text-text-secondary hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="group hover:bg-background-light dark:hover:bg-[#1e273b] transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 flex-shrink-0 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700" data-alt="Portrait of a person" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCwJKvT6ijULBJl_2Mn6pcgb6kysvJI_oytkEN5X0BbWLo5XtPpJHGfZq3YYkAVHTA1lkaapeUsK11fiyxQaxTlM0unLhhXuP6TUW9k1dbg2v7n-QeBnT2Wd0pnrZGkGT7ObFMV91MJjQKG56R03kB3T84C3dEqfH0T4fikG4XVxaHL46QrOFlWpiVTFNDnucT07VOUFsHXmfO_Hfy3lVvRHNAjMsUauIgtVR0c0e--RP871ZgQh3h56P2ZnqUUzrQtw6z4MsTcWA'); background-size: cover;"></div>
+<div class="flex flex-col">
+<span class="font-medium text-text-primary dark:text-white">Elena Rodriguez</span>
+<span class="text-xs text-text-secondary dark:text-slate-400">elena@finedge.net</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-sm text-text-primary dark:text-slate-200">FinEdge Financial</span>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-amber-100 dark:bg-amber-900/40 px-2.5 py-0.5 text-xs font-medium text-amber-800 dark:text-amber-200">
+                                            Pending
+                                        </span>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col gap-1">
+<span class="text-sm text-text-primary dark:text-slate-200">Contract Sign</span>
+<div class="h-1.5 w-full max-w-[120px] rounded-full bg-slate-100 dark:bg-slate-800">
+<div class="h-1.5 w-[10%] rounded-full bg-primary"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="rounded-lg p-2 text-text-secondary hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="flex items-center justify-between border-t border-border-color dark:border-[#2a3447] px-6 py-4">
+<span class="text-sm text-text-secondary dark:text-slate-400">
+                            Showing <span class="font-medium text-text-primary dark:text-white">1</span> to <span class="font-medium text-text-primary dark:text-white">5</span> of <span class="font-medium text-text-primary dark:text-white">24</span> results
+                        </span>
+<div class="flex items-center gap-2">
+<button class="rounded-lg border border-border-color dark:border-[#2a3447] px-3 py-1 text-sm font-medium text-text-secondary hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-[#252f42] disabled:opacity-50" disabled="">
+                                Previous
+                            </button>
+<button class="rounded-lg border border-border-color dark:border-[#2a3447] px-3 py-1 text-sm font-medium text-text-secondary hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-[#252f42]">
+                                Next
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

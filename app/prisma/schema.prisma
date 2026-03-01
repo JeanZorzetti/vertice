@@ -1,0 +1,123 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Agency {
+  id           String       @id @default(cuid())
+  name         String
+  slug         String       @unique
+  logoUrl      String?
+  primaryColor String       @default("#135bec")
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  clients      Client[]
+  users        AgencyUser[]
+}
+
+model AgencyUser {
+  id        String   @id @default(cuid())
+  agencyId  String
+  email     String
+  name      String
+  role      String   @default("member")
+  password  String?
+  createdAt DateTime @default(now())
+  agency    Agency   @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+
+  @@unique([agencyId, email])
+}
+
+model Client {
+  id          String       @id @default(cuid())
+  agencyId    String
+  name        String
+  email       String
+  company     String?
+  phone       String?
+  createdAt   DateTime     @default(now())
+  agency      Agency       @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+  onboardings Onboarding[]
+
+  @@unique([agencyId, email])
+}
+
+model Onboarding {
+  id          String           @id @default(cuid())
+  clientId    String
+  token       String           @unique @default(cuid())
+  status      OnboardingStatus @default(PENDING)
+  currentStep Int              @default(0)
+  completedAt DateTime?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  client      Client           @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  steps       OnboardingStep[]
+  magicLinks  MagicLink[]
+  assets      AssetUpload[]
+  connections PlatformConnection[]
+}
+
+model OnboardingStep {
+  id           String     @id @default(cuid())
+  onboardingId String
+  stepNumber   Int
+  data         Json?
+  completedAt  DateTime?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  onboarding   Onboarding @relation(fields: [onboardingId], references: [id], onDelete: Cascade)
+
+  @@unique([onboardingId, stepNumber])
+}
+
+model MagicLink {
+  id           String     @id @default(cuid())
+  onboardingId String
+  email        String
+  token        String     @unique @default(cuid())
+  expiresAt    DateTime
+  usedAt       DateTime?
+  createdAt    DateTime   @default(now())
+  onboarding   Onboarding @relation(fields: [onboardingId], references: [id], onDelete: Cascade)
+}
+
+model AssetUpload {
+  id           String     @id @default(cuid())
+  onboardingId String
+  fileName     String
+  fileSize     Int
+  fileType     String
+  r2Key        String
+  uploadedAt   DateTime   @default(now())
+  onboarding   Onboarding @relation(fields: [onboardingId], references: [id], onDelete: Cascade)
+}
+
+model PlatformConnection {
+  id           String     @id @default(cuid())
+  onboardingId String
+  platform     Platform
+  accessToken  String
+  refreshToken String?
+  expiresAt    DateTime?
+  connectedAt  DateTime   @default(now())
+  onboarding   Onboarding @relation(fields: [onboardingId], references: [id], onDelete: Cascade)
+
+  @@unique([onboardingId, platform])
+}
+
+enum OnboardingStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum Platform {
+  META
+  GOOGLE_ADS
+  GOOGLE_ANALYTICS
+  WORDPRESS
+}

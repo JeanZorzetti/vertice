@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Vértice Onboarding: Connect Platforms</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased selection:bg-primary/30">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Header -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-10 py-4 sticky top-0 z-20">
+<div class="flex items-center gap-4">
+<div class="size-8 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-4xl">change_history</span>
+</div>
+<h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">Vértice Marketing</h2>
+</div>
+<div class="flex flex-1 justify-end gap-8 items-center">
+<div class="hidden lg:flex items-center gap-9">
+<a class="text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-white text-sm font-medium transition-colors" href="#">Dashboard</a>
+<a class="text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-white text-sm font-medium transition-colors" href="#">Campaigns</a>
+<a class="text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-white text-sm font-medium transition-colors" href="#">Integrations</a>
+<a class="text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-white text-sm font-medium transition-colors" href="#">Settings</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center justify-center rounded-full size-10 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-10 ring-2 ring-primary/20" data-alt="User profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCpCH1CuraHCB40tR0xs9f2Fc1d37rvzfdru8ouC9QUlrPDvGHcKg1A1Yoituw8Thh6O-NpoHKMKFq9mJy3X2shWDmH-BByWk61sdjLvAASuuw3CNlC2PyhIrg999SFFFpTqhvj90B7UUdldjlQmeHadbf4HZ6zUKQrWoc7h9X6ymZBUIDvnPwOgPfjBZk9n6qy6GfuJr69I9aABkgFlKLeLcmYsfMHAfkdmwOlA2WCPu_zXuzftyQ6dH9wcMaKjInH886HrgzOpQ");'></div>
+</div>
+</div>
+</header>
+<main class="layout-container flex h-full grow flex-col py-10 px-6 sm:px-10 lg:px-40">
+<div class="layout-content-container flex flex-col max-w-[1200px] w-full mx-auto flex-1 gap-8">
+<!-- Breadcrumbs -->
+<nav class="flex items-center gap-2 text-sm font-medium text-slate-500 dark:text-slate-400">
+<a class="hover:text-primary transition-colors" href="#">Onboarding</a>
+<span class="material-symbols-outlined text-base">chevron_right</span>
+<a class="hover:text-primary transition-colors" href="#">Setup</a>
+<span class="material-symbols-outlined text-base">chevron_right</span>
+<span class="text-primary font-bold">Connect Platforms</span>
+</nav>
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2 border-b border-slate-200 dark:border-slate-800">
+<div class="flex flex-col gap-2 max-w-2xl">
+<h1 class="text-slate-900 dark:text-white text-3xl md:text-4xl font-black leading-tight tracking-tight">Connect your platforms</h1>
+<p class="text-slate-600 dark:text-slate-400 text-lg">Link your marketing accounts to enable automated reporting and real-time analytics.</p>
+</div>
+<div class="flex items-center gap-2 text-sm font-medium px-4 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-lg">
+<span class="material-symbols-outlined text-lg">info</span>
+<span>Data is encrypted securely</span>
+</div>
+</div>
+<!-- Integration Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+<!-- Meta Business Suite (Connected) -->
+<div class="group flex flex-col justify-between gap-6 rounded-xl bg-white dark:bg-slate-900 p-6 shadow-sm border border-slate-200 dark:border-slate-800 hover:shadow-md hover:border-primary/30 transition-all duration-300">
+<div class="flex items-start justify-between">
+<div class="flex gap-4">
+<div class="size-14 rounded-lg bg-[#1877F2]/10 flex items-center justify-center shrink-0">
+<img alt="Meta Logo" class="w-8 h-8" data-alt="Meta Business Suite Logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAupV_j9eEGDioCqyE2tcy1v_rXX8szRv7yTj4cXGRdD7QIvgkRZ9s3-v4nw3g-OMszicV0nON-vFuqIzTTsyxwRCgP8ITjFiQUGFGiOHelI3CHWC6Yv0kvXMUUp1554v3aWOPp5be2pEgzPMv_tC565NCaEPYL_KRLXVuPbSGi-gu-PrMqqSJHJblp__99otoSnaqo2GlWRQC0kCDzy-kLjVwazgoxTLiaXEJ6uQaezfJZ2T1feoKzqaBUeQuJbiGK-E9wOOWIg"/>
+</div>
+<div class="flex flex-col">
+<h3 class="text-slate-900 dark:text-white text-lg font-bold">Meta Business Suite</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Manage Facebook and Instagram ads, insights, and audience data.</p>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 px-3 py-1.5 rounded-full text-sm font-semibold">
+<span class="material-symbols-outlined text-lg">check_circle</span>
+<span>Connected</span>
+</div>
+<button class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Google Ads (Connected) -->
+<div class="group flex flex-col justify-between gap-6 rounded-xl bg-white dark:bg-slate-900 p-6 shadow-sm border border-slate-200 dark:border-slate-800 hover:shadow-md hover:border-primary/30 transition-all duration-300">
+<div class="flex items-start justify-between">
+<div class="flex gap-4">
+<div class="size-14 rounded-lg bg-white border border-slate-100 flex items-center justify-center shrink-0">
+<img alt="Google Ads Logo" class="w-8 h-8" data-alt="Google Ads Logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBi25Qxo35kWVpuzkPaVhnaZ7cukvJh8X4Q7hXFFplhPi_mLJPoUaJDEquDBw-WXINhjLD7bJ6OIMdoLjyB7-ibA6tk1dmL0DFOKYR9gbIM3PO59eDlg6s40q_zJxM6Hm9unTn74o3_AsCndSKuME1k1yhAU1Oy1mLnoI-PenS6bpm9YYjUCJg5baoDRO1tADEApCW_Dj4rkdKTWB8kz5E0vs503eDQBv9d6jNvVTsX-yDzr1jAOpCGsTzOm0L7FDGAcXIb_szz2g"/>
+</div>
+<div class="flex flex-col">
+<h3 class="text-slate-900 dark:text-white text-lg font-bold">Google Ads</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Track ad performance, ROI, and keyword metrics across Google networks.</p>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 px-3 py-1.5 rounded-full text-sm font-semibold">
+<span class="material-symbols-outlined text-lg">check_circle</span>
+<span>Connected</span>
+</div>
+<button class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Google Analytics (Disconnected) -->
+<div class="group flex flex-col justify-between gap-6 rounded-xl bg-white dark:bg-slate-900 p-6 shadow-sm border border-slate-200 dark:border-slate-800 hover:shadow-md hover:border-primary/30 transition-all duration-300">
+<div class="flex items-start justify-between">
+<div class="flex gap-4">
+<div class="size-14 rounded-lg bg-[#FFF4E6] flex items-center justify-center shrink-0">
+<img alt="Google Analytics Logo" class="w-8 h-8" data-alt="Google Analytics Logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCktPnbZtsxPmooZFAiuYGYb6qgDbZ4cBcGo8A6Eys8G01JI5uiwaTX8YhCSN2xxQMhSMtJfTttDSC2XAx_MUG7Kd9xR8D5qZD8g_iFv3AbmBgunLsfqIiwaZjPp2NJAA6F4yvVmyAkMLuZfAjMfeqhoHLPu_CDASMWd5X99sTvWVYs8C6cALMvr0CIOfByknShp3-pLmtmHxt8bykTIfhZ0TQNasCoRsxuQR8qorVVtAhE4c6TzLmosbFPmAcoYKzLzrQ5jjmTog"/>
+</div>
+<div class="flex flex-col">
+<h3 class="text-slate-900 dark:text-white text-lg font-bold">Google Analytics 4</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Understand user behavior, traffic sources, and conversion funnels.</p>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800">
+<button class="flex items-center gap-2 bg-primary hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-sm font-bold transition-colors w-full sm:w-auto justify-center">
+<span class="material-symbols-outlined text-lg">add_link</span>
+<span>Connect Account</span>
+</button>
+<span class="hidden sm:block text-xs font-medium text-slate-400">OAuth 2.0 Secure</span>
+</div>
+</div>
+<!-- WordPress (Disconnected) -->
+<div class="group flex flex-col justify-between gap-6 rounded-xl bg-white dark:bg-slate-900 p-6 shadow-sm border border-slate-200 dark:border-slate-800 hover:shadow-md hover:border-primary/30 transition-all duration-300">
+<div class="flex items-start justify-between">
+<div class="flex gap-4">
+<div class="size-14 rounded-lg bg-[#21759B]/10 flex items-center justify-center shrink-0">
+<img alt="WordPress Logo" class="w-8 h-8 object-contain" data-alt="WordPress Logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-ia50R2_VsD8PXe0vXce8imzvS5ZELyaIYqfb0gCkIwmQPjZjgpXaK6qIuEnFtgVYYbvYY-vOsoga7KIb2Ve-g8bfK_6-UhY1Dx1WnjKd1jNF9y3XVuvAmAgzJ_ZcDPLf_od1KyeOQYb49KN8SsbevFAK9-VLaiU4GsHEhhhHqOHC6y89KJsZgSAUnKPCxzFdBVRCFLhSUFLVdj0vl7478ldlVoR_hbGuktQ9cYDdnfE3qwhqCmjkAV8gJuuUH0TBHh3hSckZBg"/>
+</div>
+<div class="flex flex-col">
+<h3 class="text-slate-900 dark:text-white text-lg font-bold">WordPress</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Sync blog posts, landing pages, and lead capture forms.</p>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800">
+<button class="flex items-center gap-2 bg-primary hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-sm font-bold transition-colors w-full sm:w-auto justify-center">
+<span class="material-symbols-outlined text-lg">add_link</span>
+<span>Connect Account</span>
+</button>
+<span class="hidden sm:block text-xs font-medium text-slate-400">API Key Required</span>
+</div>
+</div>
+</div>
+<!-- Bottom Action -->
+<div class="flex justify-end mt-4 pt-6 border-t border-slate-200 dark:border-slate-800">
+<button class="flex items-center gap-2 px-8 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-lg font-bold hover:opacity-90 transition-opacity">
+<span>Continue to Dashboard</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</main>
+</div>
+</body></html>

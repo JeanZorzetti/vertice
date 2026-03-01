@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Vértice Marketing Onboarding Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary": "#135bec",
+                "background-light": "#f6f6f8",
+                "background-dark": "#101622",
+              },
+              fontFamily: {
+                "display": ["Manrope", "sans-serif"]
+              },
+              borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased selection:bg-primary selection:text-white">
+<div class="flex min-h-screen w-full flex-row overflow-hidden">
+<!-- Left Branding Panel -->
+<div class="hidden lg:flex w-1/3 xl:w-5/12 relative flex-col justify-between bg-slate-900 overflow-hidden">
+<!-- Background Image/Pattern -->
+<div class="absolute inset-0 z-0 bg-cover bg-center opacity-40 mix-blend-overlay" data-alt="Abstract geometric blue and grey pattern" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC8E5vRF-mhdHxpyTGY7pqPChom6vBlKbplsB_1BcR0Bwpeq_3kLTe5fCVfEmRE-TCAPcnkRLPLxGJ3e0vHGX8Pnyg8btR2KZ9zvFa5COnRs9vM2qPX4mOLE_VdSmHViezOaVSv-95Zk8cleDHjV8uRB0IqywlFZCKWqUmKYwKXDDspV5xneGpYvalDrfWLKsPhaqHd7D-dlHoBrLNJo38PSbU84Oi8JI47SM4QWxuyNqnUCoGObL5qzwwvuTHLbKwiYzbYOLY8Hw");'>
+</div>
+<div class="absolute inset-0 z-0 bg-gradient-to-b from-primary/30 to-slate-900/90"></div>
+<!-- Branding Content -->
+<div class="relative z-10 p-12 flex flex-col h-full justify-between">
+<div>
+<div class="flex items-center gap-3 text-white">
+<span class="material-symbols-outlined text-4xl">change_history</span>
+<span class="text-xl font-bold tracking-wide">VÉRTICE</span>
+</div>
+</div>
+<div class="flex flex-col gap-4 text-white/90 max-w-md">
+<p class="text-2xl font-medium leading-relaxed">
+                        "Marketing is no longer about the stuff that you make, but about the stories you tell."
+                    </p>
+<p class="text-sm font-normal text-white/60 uppercase tracking-widest mt-2">— Seth Godin</p>
+</div>
+</div>
+</div>
+<!-- Right Content Panel -->
+<div class="flex flex-1 flex-col items-center justify-center p-6 sm:p-12 lg:p-24 bg-background-light dark:bg-background-dark">
+<div class="w-full max-w-[480px] flex flex-col gap-10">
+<!-- Mobile Logo (visible only on small screens) -->
+<div class="flex lg:hidden items-center gap-2 text-primary mb-4">
+<span class="material-symbols-outlined text-4xl">change_history</span>
+<span class="text-xl font-bold tracking-wide text-slate-900 dark:text-white">VÉRTICE</span>
+</div>
+<div class="flex flex-col gap-3">
+<h1 class="text-slate-900 dark:text-white text-4xl sm:text-5xl font-extrabold leading-tight tracking-tight">
+                        Welcome to your onboarding
+                    </h1>
+<p class="text-slate-500 dark:text-slate-400 text-lg font-medium leading-relaxed">
+                        Enter the email associated with your Vértice Marketing account to receive your magic access link.
+                    </p>
+</div>
+<form class="flex flex-col gap-6" onsubmit="event.preventDefault();">
+<div class="flex flex-col gap-2">
+<label class="text-sm font-bold text-slate-700 dark:text-slate-300 ml-1" for="email">Work Email</label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-slate-400 group-focus-within:text-primary transition-colors duration-200">
+<span class="material-symbols-outlined" style="font-size: 24px;">mail</span>
+</div>
+<input class="w-full h-14 pl-12 pr-4 rounded-xl border-0 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background-light dark:focus:ring-offset-background-dark shadow-sm transition-all duration-200 text-base" id="email" name="email" placeholder="name@company.com" required="" type="email"/>
+</div>
+</div>
+<button class="w-full h-14 bg-primary hover:bg-primary/90 text-white text-base font-bold rounded-xl shadow-lg shadow-primary/20 transition-all duration-200 flex items-center justify-center gap-2 group mt-2">
+<span>Send Access Link</span>
+<span class="material-symbols-outlined group-hover:translate-x-1 transition-transform duration-200" style="font-size: 20px;">arrow_forward</span>
+</button>
+</form>
+<div class="flex flex-col gap-4 items-center text-center mt-4">
+<p class="text-sm text-slate-500 dark:text-slate-400">
+                        By clicking "Send Access Link", you agree to our 
+                        <a class="text-primary font-semibold hover:underline decoration-primary/30 underline-offset-4" href="#">Terms of Service</a> 
+                        and 
+                        <a class="text-primary font-semibold hover:underline decoration-primary/30 underline-offset-4" href="#">Privacy Policy</a>.
+                    </p>
+<div class="w-full h-px bg-slate-200 dark:bg-slate-800 my-2"></div>
+<p class="text-sm text-slate-500 dark:text-slate-400">
+                        Already have a password? <a class="text-primary font-bold hover:underline" href="#">Log in with password</a>
+</p>
+</div>
+</div>
+</div>
+</div>
+</body></html>
