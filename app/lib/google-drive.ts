@@ -3,7 +3,7 @@
  * Creates a folder per client onboarding and returns the folder ID.
  */
 
-import { google } from "googleapis";
+import { google, drive_v3 } from "googleapis";
 
 const SA_EMAIL = process.env.GOOGLE_SA_EMAIL ?? "";
 // In .env the key is stored with literal \n — parse them to real newlines
@@ -43,17 +43,14 @@ export async function createOnboardingFolder(
     ? `[Vértice] ${company} — ${clientName}`
     : `[Vértice] ${clientName}`;
 
-  const metadata: Parameters<typeof drive.files.create>[0]["requestBody"] = {
+  const requestBody: drive_v3.Schema$File = {
     name: folderName,
     mimeType: "application/vnd.google-apps.folder",
+    ...(PARENT_FOLDER_ID ? { parents: [PARENT_FOLDER_ID] } : {}),
   };
 
-  if (PARENT_FOLDER_ID) {
-    metadata.parents = [PARENT_FOLDER_ID];
-  }
-
   const res = await drive.files.create({
-    requestBody: metadata,
+    requestBody,
     fields: "id",
   });
 
