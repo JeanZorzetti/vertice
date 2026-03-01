@@ -58,6 +58,18 @@ export default function AdminHeader({
           Onboardings
         </Link>
         <Link
+          href="/admin/analytics"
+          className="px-3 py-1.5 text-sm font-semibold text-slate-600 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
+        >
+          Analytics
+        </Link>
+        <Link
+          href="/admin/templates"
+          className="px-3 py-1.5 text-sm font-semibold text-slate-600 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
+        >
+          Templates
+        </Link>
+        <Link
           href="/admin/settings"
           className="px-3 py-1.5 text-sm font-semibold text-slate-600 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
         >

@@ -7,17 +7,18 @@ datasource db {
 }
 
 model Agency {
-  id             String       @id @default(cuid())
+  id             String                @id @default(cuid())
   name           String
-  slug           String       @unique
+  slug           String                @unique
   logoUrl        String?
-  primaryColor   String       @default("#135bec")
+  primaryColor   String                @default("#135bec")
   webhookUrl     String?
   whatsappPhone  String?
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
   clients        Client[]
   users          AgencyUser[]
+  templates      OnboardingTemplate[]
 }
 
 model AgencyUser {
@@ -56,6 +57,7 @@ model Onboarding {
   completedAt   DateTime?
   lastChasedAt  DateTime?
   driveFolderId String?
+  aiAnalysis    String?
   createdAt     DateTime         @default(now())
   updatedAt     DateTime         @updatedAt
   client      Client           @relation(fields: [clientId], references: [id], onDelete: Cascade)
@@ -111,6 +113,17 @@ model PlatformConnection {
   onboarding   Onboarding @relation(fields: [onboardingId], references: [id], onDelete: Cascade)
 
   @@unique([onboardingId, platform])
+}
+
+model OnboardingTemplate {
+  id           String   @id @default(cuid())
+  agencyId     String
+  name         String
+  description  String?
+  stepDefaults Json?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  agency       Agency   @relation(fields: [agencyId], references: [id], onDelete: Cascade)
 }
 
 enum OnboardingStatus {

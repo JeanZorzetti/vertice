@@ -49,6 +49,28 @@
 - E2E: Playwright config + e2e/smoke.spec.ts
 
 🏁 FASE 1 CONCLUÍDA
+
+✅ FASE 2 — Sprint 5 (CONCLUÍDO)
+- POST /api/agency/signup + /signup page pública com auto-slug
+- /admin/settings: logo URL + cor primária com preview
+- Sidebar e header do cliente usam logo/cor da agência (white-label)
+- Header do admin reflete logo e cor da agência
+- Link "Criar conta gratuita" no /admin/login
+- Subdomínio por agência: middleware injeta x-agency-slug, login page busca branding por slug
+- DNS wildcard *.vertice.roilabs.com.br → NS delegation para Vercel
+- lib/resend.ts: sendMagicLink com baseUrl por slug de agência
+
+✅ FASE 2 — Sprint 6 (CONCLUÍDO)
+- lib/evolution.ts: WhatsApp via Evolution API (sendWhatsAppText)
+- lib/webhook.ts: dispatcher de webhooks customizáveis (fireWebhook)
+- lib/google-drive.ts: Service Account — cria pasta por onboarding (createOnboardingFolder)
+- GET /api/cron/auto-chase: lembrete automático para clientes parados >48h (e-mail + WhatsApp)
+- agency/onboardings POST: dispara webhook + WhatsApp ao criar onboarding
+- onboarding/[token]/step PUT: dispara webhook + WhatsApp ao concluir
+- GET/PUT /api/agency/settings: expõe e persiste webhookUrl + whatsappPhone
+- /admin/settings: seção Automações (WhatsApp da agência + Webhook URL)
+- .github/workflows/auto-chase.yml: cron diário 09:00 BRT via GitHub Actions
+- Schema: Agency.webhookUrl, Agency.whatsappPhone, Onboarding.lastChasedAt, Onboarding.driveFolderId
 ```
 
 ---
@@ -158,14 +180,14 @@ MagicLink     (id, client_id, token, expires_at, used_at)
 
 ---
 
-### Sprint 6 — Automações (Semana 11-12)
+### ✅ Sprint 6 — Automações (Semana 11-12) — CONCLUÍDO
 
 | Tarefa | Detalhes |
 |---|---|
-| Auto-chase | Lembrete automático para cliente parado > 48h |
-| Notificações WhatsApp | Evolution API: alerta para equipe |
-| Google Drive integration | Criar pasta do cliente ao iniciar onboarding |
-| Webhook customizável | Agência configura URL para receber eventos |
+| ✅ Auto-chase | Lembrete automático para cliente parado > 48h |
+| ✅ Notificações WhatsApp | Evolution API: alerta para equipe |
+| ✅ Google Drive integration | Criar pasta do cliente ao iniciar onboarding |
+| ✅ Webhook customizável | Agência configura URL para receber eventos |
 
 ---
 

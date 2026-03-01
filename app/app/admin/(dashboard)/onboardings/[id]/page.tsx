@@ -4,6 +4,7 @@ import { requireAgencySession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getDownloadUrl } from "@/lib/r2";
 import SendLinkButton from "./_components/SendLinkButton";
+import AIAnalysisPanel from "./_components/AIAnalysisPanel";
 
 const STATUS_STYLE: Record<string, string> = {
   PENDING: "bg-amber-50 text-amber-700 border border-amber-200",
@@ -17,7 +18,6 @@ const STATUS_LABEL: Record<string, string> = {
   COMPLETED: "Concluído",
 };
 
-// Human-readable labels for step data fields
 const STEP1_LABELS: Record<string, string> = {
   segment: "Segmento",
   employees: "Funcionários",
@@ -82,7 +82,6 @@ export default async function OnboardingDetailPage({
   if (!onboarding) notFound();
   if (onboarding.client.agency.id !== session.agencyId) redirect("/admin");
 
-  // Generate download URLs for all assets (signed, 1h expiry)
   const assetsWithUrls = await Promise.all(
     onboarding.assets.map(async (a) => ({
       ...a,
@@ -100,14 +99,25 @@ export default async function OnboardingDetailPage({
 
   return (
     <div className="flex-1 flex flex-col gap-6 p-6 md:p-8 max-w-5xl mx-auto w-full">
-      {/* Back */}
-      <Link
-        href="/admin"
-        className="flex items-center gap-1.5 text-sm font-semibold text-slate-500 hover:text-slate-900 transition-colors w-fit"
-      >
-        <span className="material-symbols-outlined text-[18px]">arrow_back</span>
-        Voltar à lista
-      </Link>
+      {/* Back + print */}
+      <div className="flex items-center justify-between">
+        <Link
+          href="/admin"
+          className="flex items-center gap-1.5 text-sm font-semibold text-slate-500 hover:text-slate-900 transition-colors w-fit"
+        >
+          <span className="material-symbols-outlined text-[18px]">arrow_back</span>
+          Voltar à lista
+        </Link>
+        <a
+          href={`/api/agency/onboardings/${id}/report`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-1.5 text-sm font-semibold text-slate-500 hover:text-slate-900 transition-colors"
+        >
+          <span className="material-symbols-outlined text-[18px]">print</span>
+          Exportar relatório
+        </a>
+      </div>
 
       {/* Header card */}
       <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -214,6 +224,12 @@ export default async function OnboardingDetailPage({
               <p className="px-6 py-4 text-sm text-slate-400 italic">Ainda não preenchido.</p>
             )}
           </section>
+
+          {/* AI Analysis */}
+          <AIAnalysisPanel
+            onboardingId={id}
+            initialAnalysis={onboarding.aiAnalysis ?? null}
+          />
         </div>
 
         {/* Sidebar — right 1/3 */}
