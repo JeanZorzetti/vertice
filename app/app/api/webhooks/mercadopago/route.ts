@@ -51,12 +51,24 @@ export async function POST(request: NextRequest) {
       });
       const subscription = await res.json();
 
-      const agencyId = subscription.external_reference as string;
+      let agencyId = subscription.external_reference as string | undefined;
       const status = subscription.status as string; // authorized | paused | cancelled | pending
       const planId = subscription.preapproval_plan_id as string;
 
+      // If no external_reference (plan init_point flow), look up agency by payer email
       if (!agencyId) {
-        console.warn("[mp-webhook] no external_reference on subscription", dataId);
+        const payerEmail = (subscription.payer as Record<string, unknown> | undefined)?.email as string | undefined;
+        if (payerEmail) {
+          const user = await prisma.agencyUser.findFirst({
+            where: { email: payerEmail },
+            select: { agencyId: true },
+          });
+          agencyId = user?.agencyId;
+        }
+      }
+
+      if (!agencyId) {
+        console.warn("[mp-webhook] could not identify agency for subscription", dataId);
         return NextResponse.json({ ok: true });
       }
 

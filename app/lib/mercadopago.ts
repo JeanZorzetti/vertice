@@ -81,44 +81,38 @@ export async function createPlans() {
 }
 
 /**
- * Creates a subscription (preapproval) for an agency and returns the init_point URL.
- * The agency is redirected there to complete payment.
+ * Returns the hosted checkout URL for a subscription plan.
+ * Fetches the plan's init_point from MP (user enters card details on MP's page).
  */
 export async function createSubscription({
   planKey,
-  payerEmail,
-  agencyId,
 }: {
   planKey: PlanKey;
-  payerEmail: string;
-  agencyId: string;
+  payerEmail?: string;
+  agencyId?: string;
 }): Promise<string> {
   const plan = PLANS[planKey];
   if (!plan.id) {
     throw new Error(`Plan ID for "${planKey}" not configured. Set MP_PLAN_${planKey.toUpperCase()}_ID env var.`);
   }
 
-  const client = getMPClient();
-  const preApproval = new PreApproval(client);
-
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "";
-
-  const res = await preApproval.create({
-    body: {
-      preapproval_plan_id: plan.id,
-      reason: `Vértice ${plan.name}`,
-      payer_email: payerEmail,
-      back_url: `${appUrl}/admin/billing?success=1`,
-      external_reference: agencyId,
-      status: "pending",
-    },
+  // Fetch the plan from MP to get its hosted checkout init_point
+  const res = await fetch(`https://api.mercadopago.com/preapproval_plan/${plan.id}`, {
+    headers: { Authorization: `Bearer ${MP_ACCESS_TOKEN}` },
   });
 
-  if (!res.init_point) {
-    throw new Error("No init_point returned from Mercado Pago");
+  if (!res.ok) {
+    const err: unknown = await res.json();
+    throw err;
   }
 
-  return res.init_point;
+  const planData = await res.json() as { init_point?: string };
+
+  if (!planData.init_point) {
+    throw new Error("No init_point returned from Mercado Pago plan");
+  }
+
+  return planData.init_point;
 }
 
 /**
