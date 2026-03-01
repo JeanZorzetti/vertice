@@ -1,6 +1,11 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Lazy init — avoids build-time crash when RESEND_API_KEY is not available
+let _resend: Resend | null = null;
+function getResend(): Resend {
+  if (!_resend) _resend = new Resend(process.env.RESEND_API_KEY);
+  return _resend;
+}
 
 const FROM_EMAIL = process.env.RESEND_FROM ?? "onboarding@vertice.app";
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
@@ -24,7 +29,7 @@ export async function sendOnboardingCompletedEmail({
 
   const adminUrl = `${APP_URL}/admin/onboardings/${onboardingId}`;
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM_EMAIL,
     to,
     subject: `✅ Onboarding concluído – ${clientName}${companyName ? ` (${companyName})` : ""}`,
@@ -97,7 +102,7 @@ export async function sendMagicLink({
 }): Promise<void> {
   const magicUrl = `${APP_URL}/api/auth/verify?token=${token}`;
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM_EMAIL,
     to,
     subject: `Seu link de acesso ao onboarding – ${agencyName}`,
