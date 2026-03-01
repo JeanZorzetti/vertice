@@ -5,6 +5,7 @@ import { randomUUID } from "crypto";
 import { sendWhatsAppText } from "@/lib/evolution";
 import { fireWebhook } from "@/lib/webhook";
 import { createOnboardingFolder } from "@/lib/google-drive";
+import { getClientLimit } from "@/lib/mercadopago";
 
 // GET /api/agency/onboardings
 // Lists all onboardings for the agency with client info and progress.
@@ -42,6 +43,42 @@ export async function POST(request: NextRequest) {
 
     if (!clientName || !email) {
       return NextResponse.json({ error: "clientName e email são obrigatórios." }, { status: 400 });
+    }
+
+    // Enforce client limit based on plan (fetch all agency fields needed below)
+    const agency = await prisma.agency.findUnique({
+      where: { id: session.agencyId },
+      select: { plan: true, trialEndsAt: true, createdAt: true, name: true, webhookUrl: true, whatsappPhone: true },
+    });
+
+    const plan = agency?.plan ?? "trial";
+    const clientLimit = getClientLimit(plan);
+
+    // Check trial expiry
+    if (plan === "trial") {
+      const trialEndsAt = agency?.trialEndsAt ?? new Date(agency!.createdAt.getTime() + 14 * 24 * 60 * 60 * 1000);
+      if (new Date() > trialEndsAt) {
+        return NextResponse.json({ error: "Seu trial expirou. Assine um plano para continuar.", code: "TRIAL_EXPIRED" }, { status: 403 });
+      }
+    }
+
+    if (plan === "inactive") {
+      return NextResponse.json({ error: "Conta inativa. Assine um plano para continuar.", code: "INACTIVE" }, { status: 403 });
+    }
+
+    if (clientLimit !== -1) {
+      const activeCount = await prisma.onboarding.count({
+        where: {
+          client: { agencyId: session.agencyId },
+          status: { not: "COMPLETED" },
+        },
+      });
+      if (activeCount >= clientLimit) {
+        return NextResponse.json({
+          error: `Limite de ${clientLimit} clientes ativos atingido. Faça upgrade para continuar.`,
+          code: "LIMIT_REACHED",
+        }, { status: 403 });
+      }
     }
 
     const normalized = email.trim().toLowerCase();
@@ -85,12 +122,7 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Fire notifications (non-blocking)
-    const agency = await prisma.agency.findUnique({
-      where: { id: session.agencyId },
-      select: { name: true, webhookUrl: true, whatsappPhone: true },
-    });
-
+    // Fire notifications (non-blocking) — reuse agency already fetched above
     if (agency) {
       fireWebhook(agency.webhookUrl, "onboarding.created", {
         onboardingId: onboarding.id,

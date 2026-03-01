@@ -84,6 +84,21 @@
 - AdminHeader: links Analytics e Templates na navegação
 - Schema: Onboarding.aiAnalysis, modelo OnboardingTemplate
 - Migration: 20260301180817_sprint7_ai_analytics_templates
+
+✅ FASE 2 — Sprint 8 (CONCLUÍDO)
+- lib/mercadopago.ts: PLANS config + createSubscription + cancelSubscription + verifyWebhookSignature
+- POST /api/webhooks/mercadopago: webhook handler com verificação de assinatura
+- GET /api/agency/billing: retorna plano atual, dias de trial, limite de clientes, lista de planos
+- POST /api/agency/billing/subscribe: cria assinatura MP e retorna init_point
+- POST /api/agency/billing/cancel: cancela assinatura MP + marca plano como inactive
+- POST /api/agency/onboarded: marca tour guiado como concluído (onboardedAt)
+- /admin/billing: página de plano e cobrança com cards Starter/Pro/Agency
+- OnboardingTour: modal 4 passos exibido no primeiro login da agência
+- /admin e AdminHeader: integração do tour + link "Plano" no nav
+- /app/page.tsx: seção #pricing com 3 planos + CTAs apontando para /signup
+- Schema: Agency.plan, trialEndsAt, mpSubscriptionId, mpSubscriptionStatus, onboardedAt
+- Migration: 20260301200000_sprint8_billing_tour
+- Planos MP criados: Starter R$97 (c696c00ae61a40748b010c83d2ae4f5f), Pro R$197 (3c72932f00334ee28d5f98862f2926d6), Agency R$397 (38550466d48f462cb4fd34f20c819db0)
 ```
 
 ---
@@ -215,16 +230,19 @@ MagicLink     (id, client_id, token, expires_at, used_at)
 
 ---
 
-### Sprint 8 — Billing + Launch (Semana 15-16)
+### ✅ Sprint 8 — Billing + Launch (Semana 15-16) — CONCLUÍDO
 
 | Tarefa | Detalhes |
 |---|---|
-| Stripe integration | Planos mensais com trial de 14 dias |
-| Página de pricing pública | Planos Starter / Pro / Agency |
-| Onboarding da própria agência | Tour guiado ao criar conta |
-| Landing page com SEO | Blog + casos de uso |
+| ✅ Mercado Pago integration | Assinaturas mensais com trial de 14 dias |
+| ✅ Página de pricing pública | Planos Starter R$97 / Pro R$197 / Agency R$397 |
+| ✅ Onboarding da própria agência | Tour guiado ao criar conta (4 passos) |
+| ✅ Limite de clientes por plano | trial=3, starter=5, pro=20, agency=ilimitado |
+| ✅ Webhook MP | Atualização automática de plano via webhook |
 
 **Go/No-Go (Fase 2):** 5 agências pagantes, churn < 10% no primeiro mês.
+
+🏁 FASE 2 CONCLUÍDA
 
 ---
 
