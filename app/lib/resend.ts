@@ -9,6 +9,7 @@ function getResend(): Resend {
 
 const FROM_EMAIL = process.env.RESEND_FROM ?? "onboarding@vertice.app";
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+const BASE_DOMAIN = process.env.NEXT_PUBLIC_BASE_DOMAIN ?? "";
 
 export async function sendOnboardingCompletedEmail({
   to,
@@ -94,13 +95,19 @@ export async function sendMagicLink({
   token,
   clientName,
   agencyName,
+  agencySlug,
 }: {
   to: string;
   token: string;
   clientName: string;
   agencyName: string;
+  agencySlug?: string;
 }): Promise<void> {
-  const magicUrl = `${APP_URL}/api/auth/verify?token=${token}`;
+  const baseUrl =
+    agencySlug && BASE_DOMAIN
+      ? `https://${agencySlug}.${BASE_DOMAIN}`
+      : APP_URL;
+  const magicUrl = `${baseUrl}/api/auth/verify?token=${token}`;
 
   await getResend().emails.send({
     from: FROM_EMAIL,

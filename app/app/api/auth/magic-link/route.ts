@@ -52,6 +52,7 @@ export async function POST(request: NextRequest) {
       token,
       clientName: client.name,
       agencyName: client.agency.name,
+      agencySlug: client.agency.slug,
     });
 
     return NextResponse.json({ ok: true });
