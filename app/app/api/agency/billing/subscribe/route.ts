@@ -36,8 +36,8 @@ export async function POST(request: NextRequest) {
     if (err instanceof Error && err.message === "UNAUTHORIZED") {
       return NextResponse.json({ error: "Não autorizado." }, { status: 401 });
     }
-    const message = err instanceof Error ? err.message : String(err);
-    console.error("[billing subscribe POST]", message, err);
+    const message = err instanceof Error ? err.message : JSON.stringify(err);
+    console.error("[billing subscribe POST]", message);
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
