@@ -31,6 +31,7 @@ export async function middleware(request: NextRequest) {
   // ── Inject x-agency-slug for all routes ─────────────────────────────────
   const agencySlug = getAgencySlug(host);
   const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-pathname", pathname);
   if (agencySlug) {
     requestHeaders.set("x-agency-slug", agencySlug);
   }
