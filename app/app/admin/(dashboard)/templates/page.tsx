@@ -7,6 +7,8 @@ interface Template {
   id: string;
   name: string;
   description: string | null;
+  isPublic: boolean;
+  usageCount: number;
   createdAt: string;
 }
 
@@ -18,6 +20,7 @@ export default function TemplatesPage() {
   const [description, setDescription] = useState("");
   const [saving, setSaving] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [togglingId, setTogglingId] = useState<string | null>(null);
 
   async function load() {
     const r = await fetch("/api/agency/templates");
@@ -53,6 +56,21 @@ export default function TemplatesPage() {
     setDeletingId(null);
   }
 
+  async function handleTogglePublic(id: string, current: boolean) {
+    setTogglingId(id);
+    const r = await fetch(`/api/agency/templates/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ isPublic: !current }),
+    });
+    if (r.ok) {
+      setTemplates((prev) =>
+        prev.map((t) => t.id === id ? { ...t, isPublic: !current } : t)
+      );
+    }
+    setTogglingId(null);
+  }
+
   return (
     <div className="flex-1 flex flex-col gap-6 p-6 md:p-8 max-w-4xl mx-auto w-full">
       {/* Header */}
@@ -69,13 +87,22 @@ export default function TemplatesPage() {
             <p className="text-sm text-slate-500 mt-0.5">Fluxos de onboarding reutilizáveis</p>
           </div>
         </div>
-        <button
-          onClick={() => setCreating(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-[#135bec] text-white text-sm font-bold rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          <span className="material-symbols-outlined text-[18px]">add</span>
-          Novo template
-        </button>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/admin/marketplace"
+            className="flex items-center gap-2 px-4 py-2 border border-slate-200 text-slate-700 text-sm font-bold rounded-lg hover:bg-slate-50 transition-colors"
+          >
+            <span className="material-symbols-outlined text-[18px]">storefront</span>
+            Marketplace
+          </Link>
+          <button
+            onClick={() => setCreating(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-[#135bec] text-white text-sm font-bold rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            <span className="material-symbols-outlined text-[18px]">add</span>
+            Novo template
+          </button>
+        </div>
       </div>
 
       {/* Create form */}
@@ -156,23 +183,54 @@ export default function TemplatesPage() {
                   <span className="material-symbols-outlined text-[#135bec] text-[20px]">content_copy</span>
                 </div>
                 <div>
-                  <p className="font-bold text-slate-900 text-sm">{t.name}</p>
+                  <div className="flex items-center gap-2">
+                    <p className="font-bold text-slate-900 text-sm">{t.name}</p>
+                    {t.isPublic && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-violet-50 text-violet-700 text-xs font-bold border border-violet-200">
+                        <span className="material-symbols-outlined text-[12px]">public</span>
+                        Público
+                      </span>
+                    )}
+                  </div>
                   {t.description && (
                     <p className="text-xs text-slate-500 mt-0.5">{t.description}</p>
                   )}
-                  <p className="text-xs text-slate-400 mt-1">
-                    Criado em {new Date(t.createdAt).toLocaleDateString("pt-BR")}
-                  </p>
+                  <div className="flex items-center gap-3 mt-1">
+                    <p className="text-xs text-slate-400">
+                      Criado em {new Date(t.createdAt).toLocaleDateString("pt-BR")}
+                    </p>
+                    {t.usageCount > 0 && (
+                      <p className="text-xs text-slate-400 flex items-center gap-1">
+                        <span className="material-symbols-outlined text-[12px]">download</span>
+                        {t.usageCount} {t.usageCount === 1 ? "uso no marketplace" : "usos no marketplace"}
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
-              <button
-                onClick={() => handleDelete(t.id)}
-                disabled={deletingId === t.id}
-                className="p-2 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
-                title="Excluir"
-              >
-                <span className="material-symbols-outlined text-[20px]">delete</span>
-              </button>
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  onClick={() => handleTogglePublic(t.id, t.isPublic)}
+                  disabled={togglingId === t.id}
+                  title={t.isPublic ? "Tornar privado" : "Publicar no marketplace"}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors disabled:opacity-50 ${
+                    t.isPublic
+                      ? "bg-violet-50 text-violet-700 hover:bg-violet-100 border border-violet-200"
+                      : "bg-slate-50 text-slate-500 hover:bg-slate-100 border border-slate-200"
+                  }`}
+                >
+                  <span className="material-symbols-outlined text-[14px]">{t.isPublic ? "public_off" : "public"}</span>
+                  {t.isPublic ? "Tornar privado" : "Publicar"}
+                </button>
+                <button
+                  onClick={() => handleDelete(t.id)}
+                  disabled={deletingId === t.id}
+                  className="p-2 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
+                  title="Excluir"
+                >
+                  <span className="material-symbols-outlined text-[20px]">delete</span>
+                </button>
+              </div>
             </div>
           ))}
         </div>

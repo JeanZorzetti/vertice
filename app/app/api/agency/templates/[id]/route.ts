@@ -2,6 +2,40 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAgencySession } from "@/lib/auth";
 
+// PATCH /api/agency/templates/[id]
+// Body: { isPublic?: boolean }
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const session = await requireAgencySession();
+    const { id } = await params;
+    const { isPublic } = await request.json();
+
+    const template = await prisma.onboardingTemplate.findUnique({ where: { id } });
+    if (!template) {
+      return NextResponse.json({ error: "Não encontrado." }, { status: 404 });
+    }
+    if (template.agencyId !== session.agencyId) {
+      return NextResponse.json({ error: "Não autorizado." }, { status: 403 });
+    }
+
+    const updated = await prisma.onboardingTemplate.update({
+      where: { id },
+      data: { isPublic: Boolean(isPublic) },
+    });
+
+    return NextResponse.json(updated);
+  } catch (err: unknown) {
+    if (err instanceof Error && err.message === "UNAUTHORIZED") {
+      return NextResponse.json({ error: "Não autorizado." }, { status: 401 });
+    }
+    console.error("[template PATCH]", err);
+    return NextResponse.json({ error: "Erro interno." }, { status: 500 });
+  }
+}
+
 // PUT /api/agency/templates/[id]
 export async function PUT(
   request: NextRequest,

@@ -3,6 +3,20 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
+interface FunnelStep {
+  step: number;
+  count: number;
+  rate: number;
+}
+
+interface Performance {
+  funnel: FunnelStep[];
+  assetRate: number;
+  connectionRate: number;
+  contractRate: number | null;
+  signedContracts: number;
+}
+
 interface Analytics {
   totalClients: number;
   totalOnboardings: number;
@@ -17,6 +31,7 @@ interface Analytics {
     currentStep: number;
     client: { name: string; company: string | null };
   }>;
+  performance: Performance;
 }
 
 const STATUS_LABEL: Record<string, string> = {
@@ -29,6 +44,13 @@ const STATUS_STYLE: Record<string, string> = {
   PENDING: "bg-amber-50 text-amber-700 border border-amber-200",
   IN_PROGRESS: "bg-blue-50 text-blue-700 border border-blue-200",
   COMPLETED: "bg-emerald-50 text-emerald-700 border border-emerald-200",
+};
+
+const STEP_LABELS: Record<number, string> = {
+  1: "Dados da Empresa",
+  2: "Identidade Visual",
+  3: "Plataformas",
+  4: "Briefing",
 };
 
 export default function AnalyticsPage() {
@@ -59,6 +81,8 @@ export default function AnalyticsPage() {
 
   // Simple sparkline — find max for scaling
   const maxDay = Math.max(...data.dailySeries.map((d) => d.count), 1);
+
+  const funnelMax = Math.max(...(data.performance?.funnel ?? []).map((f) => f.count), 1);
 
   return (
     <div className="flex-1 flex flex-col gap-6 p-6 md:p-8 max-w-6xl mx-auto w-full">
@@ -150,6 +174,90 @@ export default function AnalyticsPage() {
           </div>
         </div>
       </div>
+
+      {/* Performance: Funnel + Rates */}
+      {data.performance && (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Step funnel */}
+          <div className="lg:col-span-2 bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col gap-4">
+            <div>
+              <h2 className="text-sm font-bold text-slate-900">Funil por etapa</h2>
+              <p className="text-xs text-slate-500 mt-0.5">Quantos onboardings completaram cada etapa</p>
+            </div>
+            <div className="flex flex-col gap-3">
+              {data.performance.funnel.map((f) => (
+                <div key={f.step} className="flex items-center gap-4">
+                  <div className="w-6 h-6 rounded-full bg-[#135bec]/10 flex items-center justify-center shrink-0">
+                    <span className="text-xs font-black text-[#135bec]">{f.step}</span>
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex justify-between text-xs mb-1">
+                      <span className="font-semibold text-slate-700">{STEP_LABELS[f.step]}</span>
+                      <span className="font-bold text-slate-900">{f.count} <span className="text-slate-400 font-normal">({f.rate}%)</span></span>
+                    </div>
+                    <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-[#135bec] rounded-full transition-all duration-500"
+                        style={{ width: `${funnelMax > 0 ? (f.count / funnelMax) * 100 : 0}%` }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Engagement rates */}
+          <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col gap-4">
+            <div>
+              <h2 className="text-sm font-bold text-slate-900">Taxas de engajamento</h2>
+              <p className="text-xs text-slate-500 mt-0.5">% dos onboardings com ação realizada</p>
+            </div>
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-1">
+                <div className="flex justify-between text-xs">
+                  <span className="font-semibold text-slate-700 flex items-center gap-1">
+                    <span className="material-symbols-outlined text-[14px] text-amber-500">upload_file</span>
+                    Upload de assets
+                  </span>
+                  <span className="font-black text-slate-900">{data.performance.assetRate}%</span>
+                </div>
+                <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                  <div className="h-full bg-amber-400 rounded-full" style={{ width: `${data.performance.assetRate}%` }} />
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <div className="flex justify-between text-xs">
+                  <span className="font-semibold text-slate-700 flex items-center gap-1">
+                    <span className="material-symbols-outlined text-[14px] text-blue-500">link</span>
+                    Plataformas conectadas
+                  </span>
+                  <span className="font-black text-slate-900">{data.performance.connectionRate}%</span>
+                </div>
+                <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                  <div className="h-full bg-blue-500 rounded-full" style={{ width: `${data.performance.connectionRate}%` }} />
+                </div>
+              </div>
+
+              {data.performance.contractRate !== null && (
+                <div className="flex flex-col gap-1">
+                  <div className="flex justify-between text-xs">
+                    <span className="font-semibold text-slate-700 flex items-center gap-1">
+                      <span className="material-symbols-outlined text-[14px] text-emerald-500">draw</span>
+                      Contratos assinados
+                    </span>
+                    <span className="font-black text-slate-900">{data.performance.contractRate}%</span>
+                  </div>
+                  <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                    <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${data.performance.contractRate}%` }} />
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Recent onboardings table */}
       <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">

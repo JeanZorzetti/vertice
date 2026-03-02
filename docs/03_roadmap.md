@@ -266,7 +266,7 @@ MagicLink     (id, client_id, token, expires_at, used_at)
 |---|---|
 | ✅ Marketplace de templates | Comprar/vender fluxos de onboarding |
 | ✅ Assinatura digital integrada | Assinar contrato no próprio portal |
-| API pública | Agências integram com seus próprios sistemas |
+| ✅ API pública | Agências integram com seus próprios sistemas |
 | ✅ Mobile responsivo aprimorado | Otimização para cliente que acessa pelo celular |
 | ClickUp / Notion / Trello | Criar projeto automaticamente ao concluir |
 | Relatórios de performance | Cruzar dados de onboarding com resultados da campanha |
@@ -280,7 +280,19 @@ MagicLink     (id, client_id, token, expires_at, used_at)
 | ✅ Sidebar condicional | Step "Contrato" aparece apenas quando configurado |
 | ✅ Mobile progress bar | Barra visual de progresso no header mobile |
 
-### Sprint 10 — API Pública + Integrações (Semana 19-20)
+### ✅ Sprint 10 — API Pública REST (Semana 19-20) — CONCLUÍDO
+
+| Tarefa | Detalhes |
+|---|---|
+| ✅ lib/apikey.ts | generateApiKey (vtx_ + 48 hex), hashApiKey (SHA-256), requireApiKey middleware |
+| ✅ GET/POST /api/agency/api-key | Gera/verifica chave — raw exibida apenas uma vez |
+| ✅ GET /api/v1/onboardings | Lista com filtro status + paginação limit/offset |
+| ✅ POST /api/v1/onboardings | Cria onboarding via API com validação de plano |
+| ✅ GET /api/v1/onboardings/:id | Detalhe completo (steps, assets, contrato) |
+| ✅ /admin/settings: seção API Key | Gerar/regenerar chave + copiar + docs curl inline |
+| ✅ Schema: Agency.apiKeyHash | Migration: 20260301230000_sprint10_api_key |
+
+### Sprint 11 — Marketplace de Templates + Relatórios de Performance (Semana 21-22)
 
 ---
 

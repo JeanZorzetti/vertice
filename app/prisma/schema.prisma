@@ -131,6 +131,8 @@ model OnboardingTemplate {
   name         String
   description  String?
   stepDefaults Json?
+  isPublic     Boolean  @default(false)
+  usageCount   Int      @default(0)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   agency       Agency   @relation(fields: [agencyId], references: [id], onDelete: Cascade)
