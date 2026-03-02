@@ -15,17 +15,13 @@ export async function GET() {
       onboardingsByStatus,
       recentOnboardings,
       completedWithTime,
-      // Funnel: step completion counts
       stepCounts,
-      // Total onboardings (for funnel denominator)
       totalOnboardings,
-      // Assets: how many onboardings have at least one asset
       onboardingsWithAssets,
-      // Platform connections: how many onboardings have at least one connection
       onboardingsWithConnections,
-      // Contract: how many onboardings were signed (agency may have contractTemplate)
       signedContracts,
       agency,
+      campaignResults,
     ] = await Promise.all([
       prisma.client.count({ where: { agencyId } }),
 
@@ -95,6 +91,12 @@ export async function GET() {
         where: { id: agencyId },
         select: { contractTemplate: true },
       }),
+
+      // Campaign results aggregate
+      prisma.campaignResult.findMany({
+        where: { onboarding: { client: { agencyId } } },
+        select: { spend: true, leads: true, revenue: true },
+      }),
     ]);
 
     // Compute average completion time in hours
@@ -149,6 +151,20 @@ export async function GET() {
       ? Math.round((signedContracts / totalOnboardings) * 100)
       : null;
 
+    // Campaign aggregate
+    const campaignAggregate = campaignResults.length > 0 ? {
+      count: campaignResults.length,
+      totalSpend: campaignResults.reduce((s, r) => s + (r.spend ?? 0), 0),
+      totalRevenue: campaignResults.reduce((s, r) => s + (r.revenue ?? 0), 0),
+      totalLeads: campaignResults.reduce((s, r) => s + (r.leads ?? 0), 0),
+      avgRoas: (() => {
+        const withBoth = campaignResults.filter((r) => r.spend && r.revenue && r.spend > 0);
+        if (!withBoth.length) return null;
+        const sum = withBoth.reduce((s, r) => s + r.revenue! / r.spend!, 0);
+        return Math.round((sum / withBoth.length) * 100) / 100;
+      })(),
+    } : null;
+
     return NextResponse.json({
       totalClients,
       totalOnboardings: Object.values(statusMap).reduce((a, b) => a + b, 0),
@@ -167,6 +183,7 @@ export async function GET() {
         contractRate,
         signedContracts,
       },
+      campaignAggregate,
     });
   } catch (err: unknown) {
     if (err instanceof Error && err.message === "UNAUTHORIZED") {

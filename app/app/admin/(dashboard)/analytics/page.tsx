@@ -17,6 +17,14 @@ interface Performance {
   signedContracts: number;
 }
 
+interface CampaignAggregate {
+  count: number;
+  totalSpend: number;
+  totalRevenue: number;
+  totalLeads: number;
+  avgRoas: number | null;
+}
+
 interface Analytics {
   totalClients: number;
   totalOnboardings: number;
@@ -32,6 +40,7 @@ interface Analytics {
     client: { name: string; company: string | null };
   }>;
   performance: Performance;
+  campaignAggregate: CampaignAggregate | null;
 }
 
 const STATUS_LABEL: Record<string, string> = {
@@ -254,6 +263,46 @@ export default function AnalyticsPage() {
                   </div>
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Campaign aggregate */}
+      {data.campaignAggregate && (
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col gap-4">
+          <div>
+            <h2 className="text-sm font-bold text-slate-900">Resultados de campanha</h2>
+            <p className="text-xs text-slate-500 mt-0.5">Agregado de {data.campaignAggregate.count} onboarding{data.campaignAggregate.count !== 1 ? "s" : ""} com dados registrados</p>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="bg-slate-50 rounded-xl p-4 flex flex-col gap-0.5">
+              <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Total investido</span>
+              <span className="text-xl font-black text-slate-900">
+                {data.campaignAggregate.totalSpend > 0
+                  ? `R$ ${data.campaignAggregate.totalSpend.toLocaleString("pt-BR", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`
+                  : "—"}
+              </span>
+            </div>
+            <div className="bg-slate-50 rounded-xl p-4 flex flex-col gap-0.5">
+              <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Total leads</span>
+              <span className="text-xl font-black text-slate-900">
+                {data.campaignAggregate.totalLeads > 0 ? data.campaignAggregate.totalLeads.toLocaleString("pt-BR") : "—"}
+              </span>
+            </div>
+            <div className="bg-emerald-50 rounded-xl p-4 flex flex-col gap-0.5">
+              <span className="text-xs font-bold text-emerald-600 uppercase tracking-wide">Total receita</span>
+              <span className="text-xl font-black text-emerald-700">
+                {data.campaignAggregate.totalRevenue > 0
+                  ? `R$ ${data.campaignAggregate.totalRevenue.toLocaleString("pt-BR", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`
+                  : "—"}
+              </span>
+            </div>
+            <div className="bg-blue-50 rounded-xl p-4 flex flex-col gap-0.5">
+              <span className="text-xs font-bold text-blue-600 uppercase tracking-wide">ROAS médio</span>
+              <span className="text-xl font-black text-blue-700">
+                {data.campaignAggregate.avgRoas !== null ? `${data.campaignAggregate.avgRoas}x` : "—"}
+              </span>
             </div>
           </div>
         </div>

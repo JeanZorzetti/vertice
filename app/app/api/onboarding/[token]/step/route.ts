@@ -4,6 +4,7 @@ import { requireClientSession } from "@/lib/auth";
 import { sendOnboardingCompletedEmail } from "@/lib/resend";
 import { sendWhatsAppText } from "@/lib/evolution";
 import { fireWebhook } from "@/lib/webhook";
+import { createProjectTask } from "@/lib/projectmanagement";
 
 // PUT /api/onboarding/[token]/step
 // Body: { stepNumber: number; data: Record<string, unknown> }
@@ -74,6 +75,10 @@ export async function PUT(
                   name: true,
                   webhookUrl: true,
                   whatsappPhone: true,
+                  pmTool: true,
+                  pmApiKey: true,
+                  pmApiKey2: true,
+                  pmListId: true,
                   users: { where: { role: "admin" }, select: { email: true } },
                 },
               },
@@ -108,6 +113,17 @@ export async function PUT(
             `✅ Onboarding concluído!\n${full.client.name}${full.client.company ? ` (${full.client.company})` : ""} finalizou todas as etapas.`
           ).catch((err) => console.error("[whatsapp completion]", err));
         }
+
+        createProjectTask({
+          pmTool: full.client.agency.pmTool,
+          pmApiKey: full.client.agency.pmApiKey,
+          pmApiKey2: full.client.agency.pmApiKey2,
+          pmListId: full.client.agency.pmListId,
+          clientName: full.client.name,
+          company: full.client.company,
+          email: full.client.email,
+          onboardingId: full.id,
+        }).catch((err) => console.error("[pm task creation]", err));
       }
     }
 

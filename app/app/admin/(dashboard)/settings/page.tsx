@@ -10,6 +10,10 @@ interface AgencySettings {
   webhookUrl: string | null;
   whatsappPhone: string | null;
   contractTemplate: string | null;
+  pmTool: string | null;
+  pmApiKey: string | null;
+  pmApiKey2: string | null;
+  pmListId: string | null;
 }
 
 export default function SettingsPage() {
@@ -20,6 +24,10 @@ export default function SettingsPage() {
   const [webhookUrl, setWebhookUrl] = useState("");
   const [whatsappPhone, setWhatsappPhone] = useState("");
   const [contractTemplate, setContractTemplate] = useState("");
+  const [pmTool, setPmTool] = useState("");
+  const [pmApiKey, setPmApiKey] = useState("");
+  const [pmApiKey2, setPmApiKey2] = useState("");
+  const [pmListId, setPmListId] = useState("");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
@@ -42,6 +50,10 @@ export default function SettingsPage() {
         setWebhookUrl(data.webhookUrl ?? "");
         setWhatsappPhone(data.whatsappPhone ?? "");
         setContractTemplate(data.contractTemplate ?? "");
+        setPmTool(data.pmTool ?? "");
+        setPmApiKey(data.pmApiKey ?? "");
+        setPmApiKey2(data.pmApiKey2 ?? "");
+        setPmListId(data.pmListId ?? "");
       });
     fetch("/api/agency/api-key").then((r) => r.json()).then((d) => setHasApiKey(d.hasKey ?? false));
   }, []);
@@ -75,7 +87,7 @@ export default function SettingsPage() {
     const res = await fetch("/api/agency/settings", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, logoUrl, primaryColor, webhookUrl, whatsappPhone, contractTemplate }),
+      body: JSON.stringify({ name, logoUrl, primaryColor, webhookUrl, whatsappPhone, contractTemplate, pmTool, pmApiKey, pmApiKey2, pmListId }),
     });
 
     if (!res.ok) {
@@ -312,6 +324,86 @@ export default function SettingsPage() {
               </div>
             </details>
           </div>
+        </div>
+
+        {/* Project Management */}
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col gap-5">
+          <div>
+            <h2 className="text-sm font-bold text-slate-700 uppercase tracking-wide">Gerenciador de Projetos</h2>
+            <p className="text-xs text-slate-400 mt-1">
+              Ao concluir um onboarding, criamos automaticamente uma tarefa/card no seu sistema de gestão.
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label htmlFor="pmTool" className="text-sm font-bold text-slate-700">Ferramenta</label>
+            <select
+              id="pmTool"
+              value={pmTool}
+              onChange={(e) => setPmTool(e.target.value)}
+              className="h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#135bec] focus:border-transparent transition"
+            >
+              <option value="">Nenhuma (desativado)</option>
+              <option value="clickup">ClickUp</option>
+              <option value="notion">Notion</option>
+              <option value="trello">Trello</option>
+            </select>
+          </div>
+
+          {pmTool && (
+            <>
+              <div className="flex flex-col gap-2">
+                <label htmlFor="pmApiKey" className="text-sm font-bold text-slate-700">
+                  {pmTool === "clickup" && "API Token (Personal Token)"}
+                  {pmTool === "notion" && "Integration Token"}
+                  {pmTool === "trello" && "API Key"}
+                </label>
+                <input
+                  id="pmApiKey"
+                  type="password"
+                  value={pmApiKey}
+                  onChange={(e) => setPmApiKey(e.target.value)}
+                  placeholder={pmTool === "clickup" ? "pk_xxxx..." : pmTool === "notion" ? "secret_xxxx..." : "xxxx..."}
+                  className="h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#135bec] focus:border-transparent transition font-mono"
+                />
+              </div>
+
+              {pmTool === "trello" && (
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="pmApiKey2" className="text-sm font-bold text-slate-700">Token</label>
+                  <input
+                    id="pmApiKey2"
+                    type="password"
+                    value={pmApiKey2}
+                    onChange={(e) => setPmApiKey2(e.target.value)}
+                    placeholder="xxxx..."
+                    className="h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#135bec] focus:border-transparent transition font-mono"
+                  />
+                </div>
+              )}
+
+              <div className="flex flex-col gap-2">
+                <label htmlFor="pmListId" className="text-sm font-bold text-slate-700">
+                  {pmTool === "clickup" && "List ID"}
+                  {pmTool === "notion" && "Database ID"}
+                  {pmTool === "trello" && "List ID"}
+                </label>
+                <input
+                  id="pmListId"
+                  type="text"
+                  value={pmListId}
+                  onChange={(e) => setPmListId(e.target.value)}
+                  placeholder={pmTool === "notion" ? "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" : "123456789"}
+                  className="h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#135bec] focus:border-transparent transition font-mono"
+                />
+                <p className="text-xs text-slate-400">
+                  {pmTool === "clickup" && "Abra a lista no ClickUp → URL contém /list/XXXXXXX"}
+                  {pmTool === "notion" && "Abra o banco de dados → URL: notion.so/xxx?v=... → copie o ID de 32 chars"}
+                  {pmTool === "trello" && "Via API: GET https://api.trello.com/1/boards/{boardId}/lists"}
+                </p>
+              </div>
+            </>
+          )}
         </div>
 
         {/* Automations */}

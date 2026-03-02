@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { getDownloadUrl } from "@/lib/r2";
 import SendLinkButton from "./_components/SendLinkButton";
 import AIAnalysisPanel from "./_components/AIAnalysisPanel";
+import CampaignPanel from "./_components/CampaignPanel";
 
 const STATUS_STYLE: Record<string, string> = {
   PENDING: "bg-amber-50 text-amber-700 border border-amber-200",
@@ -76,6 +77,7 @@ export default async function OnboardingDetailPage({
       steps: { orderBy: { stepNumber: "asc" } },
       assets: { orderBy: { uploadedAt: "asc" } },
       magicLinks: { orderBy: { createdAt: "desc" }, take: 3 },
+      campaignResult: true,
     },
   });
 
@@ -246,6 +248,12 @@ export default async function OnboardingDetailPage({
           <AIAnalysisPanel
             onboardingId={id}
             initialAnalysis={onboarding.aiAnalysis ?? null}
+          />
+
+          {/* Campaign Results */}
+          <CampaignPanel
+            onboardingId={id}
+            initial={onboarding.campaignResult ?? null}
           />
         </div>
 

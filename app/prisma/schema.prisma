@@ -21,6 +21,10 @@ model Agency {
   onboardedAt          DateTime?
   contractTemplate     String?
   apiKeyHash           String?               @unique
+  pmTool               String?
+  pmApiKey             String?
+  pmApiKey2            String?
+  pmListId             String?
   createdAt            DateTime              @default(now())
   updatedAt            DateTime              @updatedAt
   clients              Client[]
@@ -71,10 +75,11 @@ model Onboarding {
   createdAt           DateTime         @default(now())
   updatedAt     DateTime         @updatedAt
   client      Client           @relation(fields: [clientId], references: [id], onDelete: Cascade)
-  steps       OnboardingStep[]
-  magicLinks  MagicLink[]
-  assets      AssetUpload[]
-  connections PlatformConnection[]
+  steps          OnboardingStep[]
+  magicLinks     MagicLink[]
+  assets         AssetUpload[]
+  connections    PlatformConnection[]
+  campaignResult CampaignResult?
 }
 
 model OnboardingStep {
@@ -136,6 +141,18 @@ model OnboardingTemplate {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   agency       Agency   @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+}
+
+model CampaignResult {
+  id           String     @id @default(cuid())
+  onboardingId String     @unique
+  spend        Float?
+  leads        Int?
+  revenue      Float?
+  notes        String?
+  recordedAt   DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  onboarding   Onboarding @relation(fields: [onboardingId], references: [id], onDelete: Cascade)
 }
 
 enum OnboardingStatus {
