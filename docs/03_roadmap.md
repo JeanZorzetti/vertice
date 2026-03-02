@@ -268,8 +268,8 @@ MagicLink     (id, client_id, token, expires_at, used_at)
 | ✅ Assinatura digital integrada | Assinar contrato no próprio portal |
 | ✅ API pública | Agências integram com seus próprios sistemas |
 | ✅ Mobile responsivo aprimorado | Otimização para cliente que acessa pelo celular |
-| ClickUp / Notion / Trello | Criar projeto automaticamente ao concluir |
-| Relatórios de performance | Cruzar dados de onboarding com resultados da campanha |
+| ✅ ClickUp / Notion / Trello | Criar projeto automaticamente ao concluir |
+| ✅ Relatórios de performance | Cruzar dados de onboarding com resultados da campanha |
 
 ### ✅ Sprint 9 — Mobile + Assinatura Digital (Semana 17-18) — CONCLUÍDO
 
