@@ -292,7 +292,33 @@ MagicLink     (id, client_id, token, expires_at, used_at)
 | ✅ /admin/settings: seção API Key | Gerar/regenerar chave + copiar + docs curl inline |
 | ✅ Schema: Agency.apiKeyHash | Migration: 20260301230000_sprint10_api_key |
 
-### Sprint 11 — Marketplace de Templates + Relatórios de Performance (Semana 21-22)
+### ✅ Sprint 11 — Marketplace de Templates + Relatórios de Performance (Semana 21-22) — CONCLUÍDO
+
+| Tarefa | Detalhes |
+|---|---|
+| ✅ isPublic + usageCount em OnboardingTemplate | Migration: 20260302000000_sprint11_marketplace |
+| ✅ GET /api/marketplace/templates | Lista templates públicos de outras agências (ordenado por usageCount) |
+| ✅ POST /api/marketplace/templates/[id]/use | Copia template para biblioteca + incrementa usageCount |
+| ✅ PATCH /api/agency/templates/[id] | Toggle isPublic (publicar/despublicar) |
+| ✅ /admin/marketplace | Página de browse do marketplace com botão Importar |
+| ✅ /admin/templates atualizado | Badge "Público", contador de usos, botão Publicar/Despublicar |
+| ✅ /admin/analytics atualizado | Funil de performance (taxa por step), taxas de asset/conexão/contrato |
+| ✅ AdminHeader | Link "Marketplace" adicionado na navegação |
+
+### ✅ Sprint 12 — Integrações de PM + Resultados de Campanha (Semana 23-24) — CONCLUÍDO
+
+| Tarefa | Detalhes |
+|---|---|
+| ✅ lib/projectmanagement.ts | createProjectTask() para ClickUp, Notion e Trello via fetch direto |
+| ✅ Agency: pmTool, pmApiKey, pmApiKey2, pmListId | Migration: 20260302010000_sprint12_pm_campaign |
+| ✅ Disparo automático ao concluir onboarding | Non-blocking .catch() no step route |
+| ✅ /admin/settings: seção "Gerenciador de Projetos" | Select + campos de API key condicionais por ferramenta |
+| ✅ Modelo CampaignResult | spend, leads, revenue, notes; relação 1:1 com Onboarding |
+| ✅ GET/PUT /api/agency/onboardings/[id]/campaign | Upsert de resultados de campanha |
+| ✅ CampaignPanel no detalhe do onboarding | KPIs: investido, leads, receita, ROAS calculado |
+| ✅ /admin/analytics: KPIs agregados de campanha | totalSpend, totalLeads, totalRevenue, avgRoas |
+
+🏁 FASE 3 CONCLUÍDA
 
 ---
 
