@@ -1,36 +1,11 @@
 import Link from "next/link";
-import Logo from "@/app/_components/Logo";
+import SiteHeader from "@/app/_components/SiteHeader";
+import SiteFooter from "@/app/_components/SiteFooter";
 
 export default function HomePage() {
   return (
     <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-white font-sans text-[#0d121b]">
-      {/* Navigation */}
-      <header className="sticky top-0 z-50 w-full border-b border-gray-100 bg-white/80 backdrop-blur-md">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Logo variant="full" height={28} className="text-[#0d121b]" />
-
-          <nav className="hidden md:flex items-center gap-8">
-            <a className="text-sm font-medium text-[#4c669a] hover:text-[#135bec] transition-colors" href="#features">Funcionalidades</a>
-            <a className="text-sm font-medium text-[#4c669a] hover:text-[#135bec] transition-colors" href="#pricing">Preços</a>
-            <a className="text-sm font-medium text-[#4c669a] hover:text-[#135bec] transition-colors" href="#integrations">Integrações</a>
-          </nav>
-
-          <div className="flex items-center gap-3">
-            <Link
-              href="/login"
-              className="hidden sm:flex h-9 items-center justify-center rounded-lg px-4 text-sm font-semibold text-[#4c669a] hover:text-[#135bec] transition-colors"
-            >
-              Entrar
-            </Link>
-            <Link
-              href="/signup"
-              className="flex h-9 items-center justify-center rounded-lg bg-[#135bec] px-4 text-sm font-bold text-white transition-all hover:bg-[#0c3b9e] hover:-translate-y-0.5 shadow-[0_4px_24px_-2px_rgba(19,91,236,0.2)]"
-            >
-              Começar Grátis
-            </Link>
-          </div>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main className="flex-grow">
         {/* Hero */}
@@ -265,38 +240,7 @@ export default function HomePage() {
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-white border-t border-gray-100 pt-16 pb-8">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-12">
-            <div className="col-span-2 lg:col-span-2">
-              <div className="mb-4">
-                <Logo variant="full" height={22} className="text-[#0d121b]" />
-              </div>
-              <p className="text-[#4c669a] text-sm max-w-xs">
-                Ajudando agências a fazer onboarding mais rápido, melhor e sem caos.
-              </p>
-            </div>
-            {[
-              { title: "Produto", links: ["Funcionalidades", "Integrações", "Preços", "Novidades"] },
-              { title: "Empresa", links: ["Sobre nós", "Vagas", "Blog", "Contato"] },
-              { title: "Legal", links: ["Política de Privacidade", "Termos de Uso", "Segurança"] },
-            ].map((col) => (
-              <div key={col.title}>
-                <h4 className="font-bold mb-4">{col.title}</h4>
-                <ul className="space-y-3 text-sm text-[#4c669a]">
-                  {col.links.map((link) => (
-                    <li key={link}><a className="hover:text-[#135bec]" href="#">{link}</a></li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-          <div className="border-t border-gray-100 pt-8">
-            <p className="text-sm text-[#4c669a]">© 2025 Vértice. Todos os direitos reservados.</p>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
