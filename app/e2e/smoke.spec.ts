@@ -9,15 +9,19 @@
  * Requires a running server (handled by playwright.config.ts webServer)
  * and the seed data (npm run db:seed) to exist.
  *
- * Env vars needed locally:
- *   TEST_ADMIN_EMAIL   — agency admin email (default: admin@roi-labs.com)
- *   TEST_ADMIN_PASS    — agency admin password (default: vertice2025)
+ * Env vars required locally (no defaults — must match the seeded admin):
+ *   TEST_ADMIN_EMAIL
+ *   TEST_ADMIN_PASS
  */
 
 import { test, expect, type Page } from "@playwright/test";
 
-const ADMIN_EMAIL = process.env.TEST_ADMIN_EMAIL ?? "admin@roi-labs.com";
-const ADMIN_PASS = process.env.TEST_ADMIN_PASS ?? "vertice2025";
+const ADMIN_EMAIL = process.env.TEST_ADMIN_EMAIL;
+const ADMIN_PASS = process.env.TEST_ADMIN_PASS;
+
+if (!ADMIN_EMAIL || !ADMIN_PASS) {
+  throw new Error("TEST_ADMIN_EMAIL e TEST_ADMIN_PASS são obrigatórias para rodar o smoke test.");
+}
 
 // ─── Agency login ──────────────────────────────────────────────────────────────
 
