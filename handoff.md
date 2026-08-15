@@ -2,103 +2,44 @@
 
 Sessão anterior (2026-08-15): fechou o card "dar destino às âncoras href="#" da
 navbar + sitemap" — commit `a22458b`, pushado e verificado em produção
-(`vertice.roilabs.com.br`). Detalhes dessa entrega no fim deste arquivo.
+(`vertice.roilabs.com.br`).
 
-Nesta sessão o usuário pediu 8 itens novos, vistos numa screenshot do header em
-`vertice.roilabs.com.br/#features`. Nenhum foi implementado ainda — só este
-handoff. Ordem sugerida: 5 → 4 → 7 primeiro (pequenos, sem ambiguidade), depois
-1/2/3 (conteúdo, mesmo padrão das 8 páginas já criadas), 6 e 8 por último
-(dependem de decisão do usuário / infra nova).
+Sessão seguinte (2026-08-15): os 8 itens pedidos numa screenshot do header
+foram todos implementados. Dois commits, pushados e com `npm run build`
+limpo antes de cada push:
 
-## 1-3. Páginas standalone: /funcionalidades, /precos, /integracoes
+- `d41aa25` — itens 5, 4, 7 (sem ambiguidade):
+  - Logo do header/footer aumentada (28→36 / 22→28) pra não ficar menor que
+    os links do nav.
+  - Botão "Agendar Demo" removido da home (nunca teve `href`/`onClick`).
+  - Rota `/vagas` revertida (página, link do footer, entrada no sitemap).
+- `5eb54ca` — itens 1/2/3, 6, 8 (decisões confirmadas com o usuário):
+  - `/funcionalidades`, `/precos`, `/integracoes` criadas e **substituem**
+    as seções `#features`/`#pricing`/`#integrations` da home (decisão do
+    usuário). Header, footer e sitemap apontam pra elas. Home ganhou uma
+    faixa de 3 cards linkando pra cada uma. `/integracoes` tem uma seção por
+    integração (Google Drive, Slack, HubSpot, Asana, Stripe) em vez de só a
+    faixa de logos.
+  - `/contato`: card de e-mail trocado por formulário (`ContactForm.tsx` +
+    `POST /api/contact` + `sendContactFormEmail` em `lib/resend.ts`) e botão
+    de WhatsApp (`wa.me/5562983443919`, número passado pelo usuário).
+  - Blog: primeiro post real publicado em `/blog/onboarding-e-o-primeiro-
+    contato-real` (tema puxado de `docs/01_vision.md`/`02_product.md`, a
+    pedido do usuário). `posts.ts` como fonte única — sem MDX/CMS pra 1 post
+    só. Listagem `/blog` trocou de "coming soon" pro post publicado.
 
-Hoje `Funcionalidades`, `Preços`, `Integrações` no header (`SiteHeader.tsx`) e
-no footer (`SiteFooter.tsx`) apontam para anchors da home
-(`/#features`, `/#pricing`, `/#integrations`). O pedido é criar páginas
-próprias nessas rotas.
+## Pendência real: RESEND_API_KEY em produção não confirmada
 
-**Decisão em aberto:** as seções já existem em `app/app/page.tsx` (linhas
-~113-266: Integrations, Features, Pricing). Perguntar ou decidir: as novas
-páginas *substituem* as seções da home (que passam a linkar pra lá) ou
-*duplicam* o conteúdo em página própria e a home continua com scroll interno?
-O padrão das 8 páginas da sessão anterior (`app/app/sobre/page.tsx` etc.) é o
-modelo a seguir: `SiteHeader` + `SiteFooter` + `<main>` com o mesmo design
-system (`#135bec` accent, `#4c669a` muted, `rounded-2xl` cards, Material
-Symbols). `/integracoes` vale expandir além da lista de logos atual (linha
-~144 de `page.tsx`: só nomes em texto) — o pedido provavelmente quer uma
-página com uma seção por integração (Google Drive, Slack, HubSpot, Asana,
-Stripe), não só repetir a faixa de logos.
+O formulário de `/contato` depende de `RESEND_API_KEY` estar configurada na
+Vercel. **Não foi possível confirmar** — `vercel env ls` falhou porque o
+projeto não está linkado localmente nesta máquina (`vercel link` pediria
+`--team`/`--project`, não tentado por ser não-interativo). `lib/resend.ts`
+já é usado em produção para magic link e e-mails de onboarding, então a key
+provavelmente existe — mas isso não prova que o formulário novo funciona.
+**Testar de verdade**: enviar o formulário em `vertice.roilabs.com.br/contato`
+e confirmar que o e-mail chega em `contato@vertice.app`.
 
-Depois de criar, atualizar `SiteHeader.tsx`/`SiteFooter.tsx` para apontar pra
-`/funcionalidades`, `/precos`, `/integracoes` em vez de `/#...`, e adicionar as
-3 rotas em `app/app/sitemap.ts`.
-
-## 4. Remover botão "Agendar Demo" da home
-
-`app/app/page.tsx:41-46` — botão sem `href`/`onClick`, nunca esteve
-funcional (achado na sessão anterior). Remover o `<button>` inteiro; decidir
-se o "Começar Grátis" (linha ~37-40, mesmo bloco) fica sozinho ou centralizado.
-Diff pequeno, sem ambiguidade de conteúdo.
-
-## 5. Logo pequena demais no header
-
-`app/app/_components/Logo.tsx`: viewBox `0 0 180 64` (variant full), texto
-"Vértice" em `fontSize="27"` dentro desse viewBox. `SiteHeader.tsx` renderiza
-com `height={28}` e `SiteFooter.tsx` com `height={22}` — o texto acaba saindo
-~12px efetivo (27 × 28/64), menor que o `text-sm` (14px) dos links do nav ao
-lado. Ver a screenshot anexada: "Vértice" visivelmente menor que
-"Funcionalidades"/"Preços"/"Integrações".
-
-Duas rotas possíveis: (a) aumentar `height` passado em `SiteHeader`/
-`SiteFooter` (ex.: 34-36), ou (b) aumentar `fontSize` dentro do próprio
-`Logo.tsx` e recalcular o viewBox/posição pra não cortar o texto. (b) é mais
-correto (a logo fica proporcional em qualquer lugar que a use — ela também
-aparece em `login/page.tsx`, `onboarding/platforms/page.tsx`,
-`admin/.../settings/page.tsx`, `signup/`), mas (a) é a fatia mínima se o
-problema for só o header/footer públicos. Testar visualmente antes de
-consolidar (Playwright ou `next dev` + screenshot).
-
-## 6. /contato: trocar e-mail por formulário + WhatsApp
-
-`app/app/contato/page.tsx` hoje tem 3 cards (E-mail, Testar produto, Já é
-cliente). Pedido: **remover o card de e-mail**, adicionar um **formulário**
-(provavelmente nome/e-mail/mensagem) e um **botão de WhatsApp**.
-
-Pendências que só o usuário resolve:
-- **Número de WhatsApp** — não existe em nenhum lugar do repo. Vai precisar de
-  um `wa.me/<número>` real.
-- **Destino do formulário** — não há API route de contato hoje. `lib/resend.ts`
-  já tem `Resend` configurado (client lazy-init, `FROM_EMAIL =
-  onboarding@vertice.app`) e é usado em `sendOnboardingCompletedEmail`/
-  `sendChaseEmail`/`sendMagicLink` — o padrão mais barato é criar
-  `app/lib/resend.ts` → nova função `sendContactFormEmail(...)` + uma API
-  route `app/app/api/contact/route.ts` que a chama, e o form do client faz
-  `fetch("/api/contact", { method: "POST" })`. Precisa confirmar
-  `RESEND_API_KEY` está configurada no ambiente de produção (Vercel) antes de
-  depender disso — não achei `.env` local no repo (ver nota da sessão
-  anterior: sem GSC nem outras credenciais locais neste projeto).
-
-## 7. Remover /vagas
-
-Reverter a criação da sessão anterior: apagar `app/app/vagas/page.tsx`,
-remover a entrada `{ label: "Vagas", href: "/vagas" }` de
-`SiteFooter.tsx` (coluna "Empresa"), remover a linha `/vagas` de
-`app/app/sitemap.ts`. Diff pequeno e mecânico.
-
-## 8. Publicar um artigo no blog
-
-`app/app/blog/page.tsx` hoje é uma página "coming soon" com 3 cards de tópico,
-sem nenhum post real (decisão da sessão anterior: não fabricar posts falsos
-com datas fictícias). Publicar um artigo de verdade muda esse pressuposto —
-precisa de: (1) um tema/ângulo real pro primeiro post (perguntar ao usuário
-ou puxar de algo que já esteja documentado em `docs/01_vision.md` /
-`docs/02_product.md`, ainda não lidos nesta sessão), (2) uma rota
-`/blog/[slug]/page.tsx` — YAGNI não criar sistema de MDX/CMS pra 1 post único,
-uma página estática basta; adicionar MDX quando houver 3+ posts. (3) trocar a
-página `/blog` de "coming soon" pra listar esse primeiro post real. (4)
-adicionar a nova rota em `sitemap.ts`.
-
-## Ambiente / gotchas confirmados na sessão anterior
+## Ambiente / gotchas confirmados
 
 - Repo: `C:\dev\vertice`, remote `github.com/JeanZorzetti/vertice`, deploy via
   Vercel (git-linked, projeto `jean-zorzettis-projects/vertice`) — push em
@@ -106,21 +47,28 @@ adicionar a nova rota em `sitemap.ts`.
 - `npm run build` (`prisma generate && next build`) não tem side effect de
   IndexNow/ping — diferente do padrão `roilabs`/Astro documentado na memória
   global. Seguro rodar direto.
+- **`npm run build` reescreve `app/tsconfig.json`** (formata `lib`/`paths`/
+  `include`/`exclude` em multi-linha e adiciona `.next/dev/types/**/*.ts`) —
+  toda vez. Não é uma mudança real, é o Next normalizando o arquivo. Rodar
+  `git checkout -- app/tsconfig.json` antes de `git add` pra não sujar o
+  commit com isso.
 - Sem `.env`/`.env.local` no repo local — nenhuma credencial (GSC, Resend, etc)
   verificável por aqui; qualquer feature que dependa de env var em produção
   precisa ser confirmada como configurada na Vercel antes de assumir que
-  funciona.
+  funciona (ver pendência acima).
 - `git commit` nesse repo dá warning de `LF will be replaced by CRLF` — é só o
   autocrlf do Git no Windows, inofensivo, não é erro.
+- Projeto Vercel não está linkado localmente nesta máquina (`vercel env`/
+  `vercel link` pedem `--team`/`--project`) — se precisar checar env vars de
+  produção de novo, ou pedir o team/project ID pro usuário, ou usar o
+  dashboard da Vercel.
 
-## Entrega da sessão anterior (referência, já concluída)
+## Entrega da sessão anterior (referência)
 
 - `SiteHeader.tsx`/`SiteFooter.tsx` extraídos de `page.tsx` e reusados.
-- 8 páginas novas criadas: `/novidades`, `/sobre`, `/vagas`, `/blog`,
-  `/contato`, `/privacidade`, `/termos`, `/seguranca`.
-- `sitemap.ts` com as rotas novas.
-- Commit `a22458b`, push em `main`, deploy Vercel confirmado (todas as 8
-  rotas responderam 200 em produção, 0 `href="#"` restantes na home).
+- 8 páginas criadas: `/novidades`, `/sobre`, `/vagas` (removida nesta sessão),
+  `/blog`, `/contato`, `/privacidade`, `/termos`, `/seguranca`.
+- Commit `a22458b`, deploy Vercel confirmado (todas as rotas responderam 200
+  em produção, 0 `href="#"` restantes na home).
 - GSC: sitemap confirmado 200/válido em produção; submissão manual ao Search
-  Console ficou por conta do usuário (sem credencial de GSC configurada para
-  `vertice.roilabs.com.br` neste ambiente).
+  Console ficou por conta do usuário.
