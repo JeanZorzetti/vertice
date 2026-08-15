@@ -1,46 +1,23 @@
 # Handoff — Vértice marketing site
 
-## Pendente nesta sessão (2026-08-15)
+## Resolvido nesta sessão (2026-08-15, continuação)
 
-### 1. Criar página 404 customizada
+### 1. Página 404 customizada — FEITO
 
-Hoje o site usa o 404 default do Next (fundo preto, texto genérico "This
-page could not be found" — sem `SiteHeader`/`SiteFooter`, sem o design
-system do site). Falta um `app/app/not-found.tsx` com o mesmo padrão visual
-das outras páginas (`SiteHeader` + `SiteFooter` + `<main>`, `#135bec`
-accent, `rounded-2xl` cards) e um link de volta pra home.
+Criado `app/app/not-found.tsx` seguindo o padrão visual das outras páginas
+(`SiteHeader` + `SiteFooter`, accent `#135bec`, card `rounded-2xl`, botão
+"Voltar para a home"). `npm run build` confirmou `/_not-found` gerada
+estaticamente, sem erros. Commit `4905117`, pushado em `main`.
 
-### 2. Artigo do blog dando 404 — CAUSA RAIZ ACHADA E CORRIGIDA, falta confirmar em produção
+### 2. Artigo do blog dando 404 — CONFIRMADO CORRIGIDO EM PRODUÇÃO
 
-`vertice.roilabs.com.br/blog/onboarding-e-o-primeiro-contato-real` estava
-retornando 404 apesar do slug bater com `posts.ts` e do build compilar sem
-erro. Causa: `app/app/blog/[slug]/page.tsx` (criado na sessão anterior)
-lia `params` como objeto síncrono —
+`curl` pra `https://vertice.roilabs.com.br/blog/onboarding-e-o-primeiro-contato-real`
+voltou **200**. Causa raiz (abaixo) e fix já estavam pushados no commit
+`ef612fe`; só faltava a confirmação do deploy, feita agora.
 
-```ts
-export default function BlogPostPage({ params }: { params: { slug: string } }) {
-  const post = getPost(params.slug); // params.slug vinha undefined
-```
-
-No App Router do Next 16 (`next 16.1.6`, confirmado no `npm run build`),
-`params` é uma `Promise` e precisa de `await`. Sem isso, `params.slug` é
-`undefined` em runtime (o build não acusa erro), `getPost(undefined)`
-retorna `undefined`, e a página cai em `notFound()` mesmo com a URL certa.
-O padrão correto já existe no repo em `onboarding/[token]/page.tsx`
-(`params: Promise<{ token: string }>` + `const { token } = await params`) —
-era só replicar.
-
-**Já corrigido e pushado** (commit `ef612fe`, branch `main`): `page.tsx` e
-`generateMetadata` agora usam `params: Promise<{ slug: string }>` +
-`await params`. `npm run build` local confirmou a rota `/blog/[slug]`
-gerada estaticamente pro slug real.
-
-**Falta confirmar**: o deploy da Vercel ainda não tinha propagado no fim
-desta sessão (`curl` pra URL de produção ainda voltava 404 ~1 min depois do
-push). Primeira coisa a fazer na próxima sessão: `curl -s -o /dev/null -w
-"%{http_code}" https://vertice.roilabs.com.br/blog/onboarding-e-o-primeiro-contato-real`
-— se ainda 404, checar o deploy mais recente no dashboard da Vercel (o
-projeto não está linkado localmente nesta máquina, ver gotcha abaixo).
+Causa: `app/app/blog/[slug]/page.tsx` lia `params` como objeto síncrono em
+vez de `Promise<{ slug: string }>` + `await` (obrigatório no Next 16). Fix
+no commit `ef612fe`.
 
 ## Lição pra qualquer rota `[param]` nova neste repo
 
@@ -68,8 +45,10 @@ como objeto síncrono. É o padrão do Next 16 e o repo já segue isso em
   etc.) verificável por aqui.
 - `git commit` nesse repo dá warning de `LF will be replaced by CRLF` — é o
   autocrlf do Git no Windows, inofensivo.
-- Pendência ainda aberta de sessão anterior: não foi confirmado se
-  `RESEND_API_KEY` está configurada na Vercel de produção — o formulário de
+
+## Pendente
+
+- `RESEND_API_KEY` na Vercel de produção não confirmada — o formulário de
   `/contato` depende dela. Testar enviando de verdade e confirmar que o
   e-mail chega em `contato@vertice.app`.
 
@@ -81,5 +60,7 @@ como objeto síncrono. É o padrão do Next 16 e o repo já segue isso em
   formulário + WhatsApp, primeiro post do blog publicado. Commits `d41aa25`,
   `5eb54ca`, `756f6f7`.
 - Sessão 2026-08-15 (tarde): fix do 404 no post do blog. Commit `ef612fe`.
+- Sessão 2026-08-15 (continuação): confirmado deploy do fix do blog (200 em
+  prod) + página 404 customizada criada. Commit `4905117`.
 - Sessão anterior: 8 páginas de marketing criadas, âncoras `href="#"`
   resolvidas. Commit `a22458b`.
