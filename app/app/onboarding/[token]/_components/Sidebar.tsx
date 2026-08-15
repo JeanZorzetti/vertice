@@ -44,6 +44,8 @@ export default function Sidebar({
     return "pending";
   }
 
+  const progressPct = Math.round((completedSteps.length / STEP_LABELS.length) * 100);
+
   function contractStatus(): "done" | "active" | "pending" {
     if (contractSigned) return "done";
     if (pathname === contractPath) return "active";
@@ -75,7 +77,7 @@ export default function Sidebar({
           key={label}
           className="flex items-center gap-3 px-3 py-3 rounded-lg border-l-4"
           style={{
-            backgroundColor: `${primaryColor}1a`,
+            backgroundColor: "var(--agency-primary-light)",
             borderColor: primaryColor,
           }}
         >
@@ -130,9 +132,23 @@ export default function Sidebar({
         </div>
 
         {/* Title */}
-        <div className="flex flex-col gap-1">
-          <h1 className="text-slate-900 text-lg font-bold leading-normal">Configuração do Onboarding</h1>
-          <p className="text-slate-500 text-sm font-medium">Complete seu perfil para começarmos.</p>
+        <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-1">
+            <h1 className="text-slate-900 text-lg font-bold leading-normal">Configuração do Onboarding</h1>
+            <p className="text-slate-500 text-sm font-medium">Complete seu perfil para começarmos.</p>
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <div className="flex items-center justify-between text-xs font-semibold text-slate-500">
+              <span>Progresso</span>
+              <span style={{ color: primaryColor }}>{progressPct}% Completo</span>
+            </div>
+            <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+              <div
+                className="h-full rounded-full transition-all duration-[350ms]"
+                style={{ width: `${progressPct}%`, backgroundColor: primaryColor }}
+              />
+            </div>
+          </div>
         </div>
 
         {/* Steps */}

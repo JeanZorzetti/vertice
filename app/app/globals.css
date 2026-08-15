@@ -28,6 +28,14 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Agency white-label palette — --agency-primary is set inline per agency
+   (see onboarding/[token]/layout.tsx); tones derive from it via OKLCH. */
+:root {
+  --agency-primary: var(--color-primary);
+  --agency-primary-hover: oklch(from var(--agency-primary) calc(l - 0.15) c h);
+  --agency-primary-light: oklch(from var(--agency-primary) 0.95 0.05 h);
+}
+
 /* Material Symbols helper */
 .material-symbols-outlined {
   font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;

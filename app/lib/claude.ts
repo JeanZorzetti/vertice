@@ -1,6 +1,6 @@
 /**
  * Claude API integration for onboarding briefing analysis.
- * Uses claude-sonnet-4-6 to analyze completed onboarding step data.
+ * Uses claude-sonnet-5 to analyze completed onboarding step data.
  */
 
 import Anthropic from "@anthropic-ai/sdk";
@@ -83,7 +83,7 @@ Produza um relatório com as seguintes seções:
 Use tom profissional em português brasileiro. Seja específico e acionável.`;
 
   const message = await client.messages.create({
-    model: "claude-sonnet-4-6",
+    model: "claude-sonnet-5",
     max_tokens: 2048,
     messages: [{ role: "user", content: prompt }],
   });

@@ -54,7 +54,10 @@ export default async function OnboardingTokenLayout({
   const progressCount = completedSteps.length;
 
   return (
-    <div className="relative flex min-h-screen w-full overflow-x-hidden bg-[#f6f6f8] font-sans text-slate-900 antialiased">
+    <div
+      className="relative flex min-h-screen w-full overflow-x-hidden bg-[#f6f6f8] font-sans text-slate-900 antialiased"
+      style={{ ["--agency-primary" as string]: agency.primaryColor }}
+    >
       <Sidebar
         agencyName={agency.name}
         agencyLogoUrl={agency.logoUrl ?? null}
