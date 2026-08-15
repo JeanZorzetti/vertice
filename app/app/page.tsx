@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Logo from "@/app/_components/Logo";
 
 export default function HomePage() {
   return (
@@ -6,12 +7,7 @@ export default function HomePage() {
       {/* Navigation */}
       <header className="sticky top-0 z-50 w-full border-b border-gray-100 bg-white/80 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-2">
-            <div className="flex size-8 items-center justify-center rounded-lg bg-[#135bec]/10">
-              <span className="material-symbols-outlined text-[#135bec] text-[24px]">pentagon</span>
-            </div>
-            <span className="text-xl font-bold tracking-tight text-[#0d121b]">Vértice</span>
-          </div>
+          <Logo variant="full" height={28} className="text-[#0d121b]" />
 
           <nav className="hidden md:flex items-center gap-8">
             <a className="text-sm font-medium text-[#4c669a] hover:text-[#135bec] transition-colors" href="#features">Funcionalidades</a>
@@ -274,11 +270,8 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-12">
             <div className="col-span-2 lg:col-span-2">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="flex size-6 items-center justify-center rounded bg-[#135bec]/10">
-                  <span className="material-symbols-outlined text-[#135bec] text-[18px]">pentagon</span>
-                </div>
-                <span className="text-lg font-bold">Vértice</span>
+              <div className="mb-4">
+                <Logo variant="full" height={22} className="text-[#0d121b]" />
               </div>
               <p className="text-[#4c669a] text-sm max-w-xs">
                 Ajudando agências a fazer onboarding mais rápido, melhor e sem caos.

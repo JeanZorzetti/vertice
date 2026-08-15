@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import LoginForm from "./_components/LoginForm";
+import Logo from "@/app/_components/Logo";
 
 interface AgencyBranding {
   name: string;
@@ -65,12 +66,7 @@ export default async function LoginPage({
               />
             ) : (
               <>
-                <div
-                  className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
-                  style={{ backgroundColor: color }}
-                >
-                  <span className="material-symbols-outlined text-white text-2xl">change_history</span>
-                </div>
+                <Logo variant="mark" height={40} className="shrink-0" style={{ color }} />
                 <span className="text-xl font-bold text-white tracking-tight">
                   {agency?.name ?? "Vértice"}
                 </span>
@@ -97,12 +93,7 @@ export default async function LoginPage({
               <img src={agency.logoUrl} alt={agency.name} className="h-9 w-auto object-contain max-w-[160px]" />
             ) : (
               <>
-                <div
-                  className="w-9 h-9 rounded-lg flex items-center justify-center"
-                  style={{ backgroundColor: color }}
-                >
-                  <span className="material-symbols-outlined text-white text-xl">change_history</span>
-                </div>
+                <Logo variant="mark" height={36} style={{ color }} />
                 <span className="text-lg font-bold text-slate-900">{agency?.name ?? "Vértice"}</span>
               </>
             )}

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Logo from "@/app/_components/Logo";
 
 const steps = [
   { label: "Dados da Empresa", status: "done" },
@@ -19,10 +20,7 @@ export default function BrandAssetsPage() {
       <aside className="w-80 bg-white border-r border-slate-200 flex-shrink-0 hidden lg:flex flex-col justify-between h-screen fixed left-0 top-0 z-10">
         <div className="p-8 flex flex-col gap-10">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-[#135bec] flex items-center justify-center text-white">
-              <span className="material-symbols-outlined text-2xl">change_history</span>
-            </div>
-            <h2 className="text-xl font-bold tracking-tight text-slate-900">Vértice</h2>
+            <Logo variant="full" height={28} className="text-slate-900" />
           </div>
 
           <div className="flex flex-col gap-1">
@@ -78,10 +76,7 @@ export default function BrandAssetsPage() {
         {/* Mobile Header */}
         <div className="lg:hidden flex items-center justify-between p-4 bg-white border-b border-slate-200">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded bg-[#135bec] flex items-center justify-center text-white">
-              <span className="material-symbols-outlined text-lg">change_history</span>
-            </div>
-            <span className="font-bold text-slate-900">Vértice</span>
+            <Logo variant="full" height={22} className="text-slate-900" />
           </div>
           <button className="text-slate-500">
             <span className="material-symbols-outlined">menu</span>

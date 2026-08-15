@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Logo from "@/app/_components/Logo";
 
 const platforms = [
   {
@@ -48,7 +49,7 @@ export default function PlatformsPage() {
       {/* Header */}
       <header className="flex items-center justify-between border-b border-slate-200 bg-white px-10 py-4 sticky top-0 z-20">
         <div className="flex items-center gap-4">
-          <span className="material-symbols-outlined text-[#135bec] text-4xl">change_history</span>
+          <Logo variant="mark" height={32} className="text-[#135bec]" />
           <h2 className="text-slate-900 text-lg font-bold leading-tight tracking-tight">Vértice Marketing</h2>
         </div>
 

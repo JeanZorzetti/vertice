@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Logo from "@/app/_components/Logo";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -40,10 +41,7 @@ export default function AdminLoginPage() {
       {/* Left panel */}
       <div className="hidden lg:flex w-[480px] bg-[#0d121b] flex-col justify-between p-12 shrink-0">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-[#135bec] flex items-center justify-center">
-            <span className="material-symbols-outlined text-white text-2xl">change_history</span>
-          </div>
-          <span className="text-xl font-bold text-white tracking-tight">Vértice</span>
+          <Logo variant="full" height={32} className="text-white" />
           <span className="text-sm text-[#4c669a] font-medium ml-1">Admin</span>
         </div>
 
@@ -65,11 +63,9 @@ export default function AdminLoginPage() {
       <div className="flex-1 flex items-center justify-center p-6">
         <div className="w-full max-w-md flex flex-col gap-8">
           {/* Mobile logo */}
-          <div className="flex lg:hidden items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-[#135bec] flex items-center justify-center">
-              <span className="material-symbols-outlined text-white text-xl">change_history</span>
-            </div>
-            <span className="text-lg font-bold text-slate-900 tracking-tight">Vértice Admin</span>
+          <div className="flex lg:hidden items-center gap-2">
+            <Logo variant="full" height={28} className="text-slate-900" />
+            <span className="text-sm text-slate-500 font-medium ml-1">Admin</span>
           </div>
 
           <div className="flex flex-col gap-2">

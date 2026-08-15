@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Logo from "@/app/_components/Logo";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -61,10 +62,7 @@ export default function SignupPage() {
       {/* Left panel */}
       <div className="hidden lg:flex w-[480px] bg-[#0d121b] flex-col justify-between p-12 shrink-0">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-[#135bec] flex items-center justify-center">
-            <span className="material-symbols-outlined text-white text-2xl">change_history</span>
-          </div>
-          <span className="text-xl font-bold text-white tracking-tight">Vértice</span>
+          <Logo variant="full" height={32} className="text-white" />
         </div>
 
         <div className="flex flex-col gap-6">
@@ -95,10 +93,7 @@ export default function SignupPage() {
       <div className="flex-1 flex items-center justify-center p-6">
         <div className="w-full max-w-md flex flex-col gap-7">
           <div className="flex lg:hidden items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-[#135bec] flex items-center justify-center">
-              <span className="material-symbols-outlined text-white text-xl">change_history</span>
-            </div>
-            <span className="text-lg font-bold text-slate-900 tracking-tight">Vértice</span>
+            <Logo variant="full" height={28} className="text-slate-900" />
           </div>
 
           <div className="flex flex-col gap-1">
