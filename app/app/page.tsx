@@ -40,10 +40,6 @@ export default function HomePage() {
               >
                 Começar Grátis
               </Link>
-              <button className="w-full sm:w-auto h-12 px-8 rounded-lg border border-gray-200 bg-white font-semibold text-base hover:border-[#135bec]/30 hover:bg-gray-50 transition-all flex items-center justify-center gap-2">
-                <span className="material-symbols-outlined text-[20px]">calendar_month</span>
-                Agendar Demo
-              </button>
             </div>
 
             {/* Dashboard Mockup */}

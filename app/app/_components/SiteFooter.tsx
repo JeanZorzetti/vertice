@@ -15,7 +15,6 @@ const columns: { title: string; links: { label: string; href: string }[] }[] = [
     title: "Empresa",
     links: [
       { label: "Sobre nós", href: "/sobre" },
-      { label: "Vagas", href: "/vagas" },
       { label: "Blog", href: "/blog" },
       { label: "Contato", href: "/contato" },
     ],
@@ -37,7 +36,7 @@ export default function SiteFooter() {
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-12">
           <div className="col-span-2 lg:col-span-2">
             <div className="mb-4">
-              <Logo variant="full" height={22} className="text-[#0d121b]" />
+              <Logo variant="full" height={28} className="text-[#0d121b]" />
             </div>
             <p className="text-[#4c669a] text-sm max-w-xs">
               Ajudando agências a fazer onboarding mais rápido, melhor e sem caos.

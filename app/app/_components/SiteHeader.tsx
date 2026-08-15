@@ -6,7 +6,7 @@ export default function SiteHeader() {
     <header className="sticky top-0 z-50 w-full border-b border-gray-100 bg-white/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href="/">
-          <Logo variant="full" height={28} className="text-[#0d121b]" />
+          <Logo variant="full" height={36} className="text-[#0d121b]" />
         </Link>
 
         <nav className="hidden md:flex items-center gap-8">
