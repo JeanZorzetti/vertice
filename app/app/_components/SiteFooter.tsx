@@ -5,9 +5,9 @@ const columns: { title: string; links: { label: string; href: string }[] }[] = [
   {
     title: "Produto",
     links: [
-      { label: "Funcionalidades", href: "/#features" },
-      { label: "Integrações", href: "/#integrations" },
-      { label: "Preços", href: "/#pricing" },
+      { label: "Funcionalidades", href: "/funcionalidades" },
+      { label: "Integrações", href: "/integracoes" },
+      { label: "Preços", href: "/precos" },
       { label: "Novidades", href: "/novidades" },
     ],
   },

@@ -10,9 +10,9 @@ export default function SiteHeader() {
         </Link>
 
         <nav className="hidden md:flex items-center gap-8">
-          <Link className="text-sm font-medium text-[#4c669a] hover:text-[#135bec] transition-colors" href="/#features">Funcionalidades</Link>
-          <Link className="text-sm font-medium text-[#4c669a] hover:text-[#135bec] transition-colors" href="/#pricing">Preços</Link>
-          <Link className="text-sm font-medium text-[#4c669a] hover:text-[#135bec] transition-colors" href="/#integrations">Integrações</Link>
+          <Link className="text-sm font-medium text-[#4c669a] hover:text-[#135bec] transition-colors" href="/funcionalidades">Funcionalidades</Link>
+          <Link className="text-sm font-medium text-[#4c669a] hover:text-[#135bec] transition-colors" href="/precos">Preços</Link>
+          <Link className="text-sm font-medium text-[#4c669a] hover:text-[#135bec] transition-colors" href="/integracoes">Integrações</Link>
         </nav>
 
         <div className="flex items-center gap-3">

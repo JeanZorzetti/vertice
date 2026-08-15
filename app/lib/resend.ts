@@ -156,6 +156,58 @@ export async function sendChaseEmail({
   });
 }
 
+export async function sendContactFormEmail({
+  name,
+  email,
+  message,
+}: {
+  name: string;
+  email: string;
+  message: string;
+}): Promise<void> {
+  await getResend().emails.send({
+    from: FROM_EMAIL,
+    to: ["contato@vertice.app"],
+    replyTo: email,
+    subject: `Novo contato pelo site — ${name}`,
+    html: `
+      <!DOCTYPE html>
+      <html lang="pt-BR">
+      <head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /></head>
+      <body style="margin:0;padding:0;background:#f6f6f8;font-family:'Segoe UI',sans-serif;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background:#f6f6f8;padding:40px 0;">
+          <tr><td align="center">
+            <table width="580" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:16px;border:1px solid #e7ebf3;overflow:hidden;">
+              <tr>
+                <td style="background:#135bec;padding:32px 40px;text-align:center;">
+                  <span style="color:#ffffff;font-size:22px;font-weight:800;letter-spacing:-0.5px;">Vértice</span>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:40px;">
+                  <h1 style="margin:0 0 16px;font-size:22px;font-weight:800;color:#0d121b;">Nova mensagem pelo site</h1>
+                  <p style="margin:0 0 4px;font-size:14px;color:#a0a9bb;">Nome</p>
+                  <p style="margin:0 0 16px;font-size:15px;color:#0d121b;font-weight:600;">${name}</p>
+                  <p style="margin:0 0 4px;font-size:14px;color:#a0a9bb;">E-mail</p>
+                  <p style="margin:0 0 16px;font-size:15px;color:#0d121b;font-weight:600;">${email}</p>
+                  <p style="margin:0 0 4px;font-size:14px;color:#a0a9bb;">Mensagem</p>
+                  <p style="margin:0;font-size:15px;color:#0d121b;white-space:pre-wrap;">${message}</p>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:20px 40px;border-top:1px solid #e7ebf3;text-align:center;">
+                  <p style="margin:0;font-size:12px;color:#a0a9bb;">© 2025 Vértice · Powered by ROI Labs</p>
+                </td>
+              </tr>
+            </table>
+          </td></tr>
+        </table>
+      </body>
+      </html>
+    `,
+  });
+}
+
 export async function sendMagicLink({
   to,
   token,
