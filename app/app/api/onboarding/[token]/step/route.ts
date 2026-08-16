@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireClientSession } from "@/lib/auth";
-import { sendOnboardingCompletedEmail } from "@/lib/resend";
+import { sendOnboardingCompletedEmail } from "@/lib/brevo";
 import { sendWhatsAppText } from "@/lib/evolution";
 import { fireWebhook } from "@/lib/webhook";
 import { createProjectTask } from "@/lib/projectmanagement";

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { sendMagicLink } from "@/lib/resend";
+import { sendMagicLink } from "@/lib/brevo";
 import { randomUUID } from "crypto";
 
 // POST /api/auth/magic-link

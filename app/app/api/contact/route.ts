@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { sendContactFormEmail } from "@/lib/resend";
+import { sendContactFormEmail } from "@/lib/brevo";
 
 // POST /api/contact
 // Body: { name: string, email: string, message: string }

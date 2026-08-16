@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { sendChaseEmail } from "@/lib/resend";
+import { sendChaseEmail } from "@/lib/brevo";
 import { sendWhatsAppText } from "@/lib/evolution";
 import { randomUUID } from "crypto";
 

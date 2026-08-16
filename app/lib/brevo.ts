@@ -1,15 +1,40 @@
-import { Resend } from "resend";
-
-// Lazy init — avoids build-time crash when RESEND_API_KEY is not available
-let _resend: Resend | null = null;
-function getResend(): Resend {
-  if (!_resend) _resend = new Resend(process.env.RESEND_API_KEY);
-  return _resend;
-}
-
-const FROM_EMAIL = process.env.RESEND_FROM ?? "onboarding@vertice.app";
+const BREVO_API_URL = "https://api.brevo.com/v3/smtp/email";
+const FROM_EMAIL = process.env.BREVO_FROM ?? "onboarding@vertice.roilabs.com.br";
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
 const BASE_DOMAIN = process.env.NEXT_PUBLIC_BASE_DOMAIN ?? "";
+
+async function sendEmail({
+  to,
+  subject,
+  html,
+  replyTo,
+}: {
+  to: string[];
+  subject: string;
+  html: string;
+  replyTo?: string;
+}): Promise<void> {
+  const res = await fetch(BREVO_API_URL, {
+    method: "POST",
+    headers: {
+      "api-key": process.env.BREVO_API_KEY ?? "",
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      sender: { email: FROM_EMAIL },
+      to: to.map((email) => ({ email })),
+      subject,
+      htmlContent: html,
+      ...(replyTo ? { replyTo: { email: replyTo } } : {}),
+    }),
+  });
+
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(`Brevo send failed (${res.status}): ${body}`);
+  }
+}
 
 export async function sendOnboardingCompletedEmail({
   to,
@@ -30,8 +55,7 @@ export async function sendOnboardingCompletedEmail({
 
   const adminUrl = `${APP_URL}/admin/onboardings/${onboardingId}`;
 
-  await getResend().emails.send({
-    from: FROM_EMAIL,
+  await sendEmail({
     to,
     subject: `✅ Onboarding concluído – ${clientName}${companyName ? ` (${companyName})` : ""}`,
     html: `
@@ -101,9 +125,8 @@ export async function sendChaseEmail({
   agencyName: string;
   magicUrl: string;
 }): Promise<void> {
-  await getResend().emails.send({
-    from: FROM_EMAIL,
-    to,
+  await sendEmail({
+    to: [to],
     subject: `Lembrete: finalize seu onboarding com ${agencyName}`,
     html: `
       <!DOCTYPE html>
@@ -165,8 +188,7 @@ export async function sendContactFormEmail({
   email: string;
   message: string;
 }): Promise<void> {
-  await getResend().emails.send({
-    from: FROM_EMAIL,
+  await sendEmail({
     to: ["contato@vertice.app"],
     replyTo: email,
     subject: `Novo contato pelo site — ${name}`,
@@ -227,9 +249,8 @@ export async function sendMagicLink({
       : APP_URL;
   const magicUrl = `${baseUrl}/api/auth/verify?token=${token}`;
 
-  await getResend().emails.send({
-    from: FROM_EMAIL,
-    to,
+  await sendEmail({
+    to: [to],
     subject: `Seu link de acesso ao onboarding – ${agencyName}`,
     html: `
       <!DOCTYPE html>
