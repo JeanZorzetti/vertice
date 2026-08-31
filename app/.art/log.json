@@ -1,0 +1,16 @@
+[
+  {
+    "data": "2026-08-31",
+    "alvo": "logo",
+    "direcao": "Convergencia",
+    "eixos": "V solido / juntas geradas do dado / corte seco",
+    "resultado": "aprovado",
+    "recusadas": [
+      "feixe de fluxos convergindo (le como vassoura, nao como vertice)",
+      "cantos redondos nas pecas (vira pegada de animal, perde o V)",
+      "apice mais grosso que os bracos (degrau no encaixe, assimetrico)",
+      "sem peca de apice (o vertice some, viram duas barras soltas)"
+    ],
+    "artefatos": ["scripts/logo-mark.mjs", "app/_components/Logo.tsx", "app/icon.svg"]
+  }
+]

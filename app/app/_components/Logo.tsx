@@ -5,50 +5,53 @@ type LogoProps = {
   style?: React.CSSProperties
 }
 
-const PATH = 'M10 34L26 48L54 16'
-const LEN = 63.78 // comprimento do traçado, em unidades do viewBox
-const DONE = 0.72 // fração concluída
-
 /**
- * Marca do Vértice: o check é um vértice — dois traços que se encontram num ponto. E um
- * check pela metade é exatamente o dado do produto: um onboarding em andamento. O traço
- * fraco é o que falta, o sólido é o que já entrou, e a dobra entre os dois é o vértice.
+ * Marca da Vértice. O objeto é o V — duas arestas que se encontram num ponto. A
+ * textura são as juntas que partem esse V nas 4 etapas do onboarding, mais a
+ * peça central: o vértice propriamente dito, onde as duas metades se encontram
+ * e o onboarding fecha.
  *
- * O preenchimento sai de `stroke-dasharray` sobre o comprimento do traçado — para mostrar
- * outro percentual, mude DONE; para mudar o traçado, recalcule LEN (soma dos dois segmentos).
+ * Nada aqui foi posicionado à mão. PATH e DASH saem de `scripts/logo-mark.mjs`,
+ * que lê o número de etapas de STEP_LABELS (onboarding/[token]/_components/Sidebar)
+ * e distribui os segmentos pelo comprimento do traço. Mudou o número de etapas?
+ * Rode o script e cole a saída aqui e em `app/icon.svg` — não edite os números.
  *
- * Usa `currentColor` — a cor vem do container. O `icon.svg` do favicon repete a mesma
- * construção com o container azul.
+ * Usa `currentColor`: a cor vem do container (white-label da agência incluído).
  */
+const PATH = 'M12 10L32 46L52 10'
+const DASH = '13.29 2.8 13.29 2.8 18 2.8 13.29 2.8 13.29 0'
+const LOCKUP_W = 188
+
 export default function Logo({ variant = 'full', height = 32, className, style }: LogoProps) {
   const full = variant === 'full'
   return (
     <svg
-      viewBox={full ? '0 0 180 64' : '0 0 64 64'}
+      viewBox={full ? `0 0 ${LOCKUP_W} 64` : '0 0 64 64'}
       height={height}
-      width={(height * (full ? 180 : 64)) / 64}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="9"
-      strokeLinecap="round"
-      strokeLinejoin="round"
+      width={(height * (full ? LOCKUP_W : 64)) / 64}
       role="img"
       aria-label="Vértice"
       className={className}
       style={style}
     >
-      <path d={PATH} opacity="0.24" />
-      <path d={PATH} strokeDasharray={`${LEN * DONE} 999`} />
+      <path
+        d={PATH}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="9"
+        strokeLinejoin="miter"
+        strokeMiterlimit="4"
+        strokeDasharray={DASH}
+      />
       {full && (
         <text
-          x="74"
-          y="32"
+          x="66"
+          y="33"
           dominantBaseline="central"
-          fontSize="27"
+          fontSize="30"
           fontWeight="800"
-          letterSpacing="-0.8"
+          letterSpacing="-1"
           fill="currentColor"
-          stroke="none"
           style={{ fontFamily: 'var(--font-display)' }}
         >
           Vértice
