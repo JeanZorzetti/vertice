@@ -5,7 +5,7 @@ import { randomUUID } from "crypto";
 import { sendWhatsAppText } from "@/lib/evolution";
 import { fireWebhook } from "@/lib/webhook";
 import { createOnboardingFolder } from "@/lib/google-drive";
-import { getClientLimit } from "@/lib/mercadopago";
+import { getClientLimit } from "@/lib/stripe";
 
 // GET /api/agency/onboardings
 // Lists all onboardings for the agency with client info and progress.

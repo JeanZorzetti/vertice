@@ -66,7 +66,7 @@ Ou seja: **tudo que é estático funciona, tudo que toca o banco falha.**
 | Storage | Cloudflare R2 (AWS SDK S3 + presigner) | 3.1000.0 |
 | IA | `@anthropic-ai/sdk` (claude-sonnet-4-6) | 0.78.0 |
 | Google APIs | googleapis | 171.4.0 |
-| Pagamentos | mercadopago | 2.12.0 |
+| Pagamentos | stripe | 22.6.0 |
 | E2E | Playwright | 1.58.2 |
 | Deploy | Vercel, região `gru1` | — |
 
@@ -137,7 +137,7 @@ Agency ──┬── AgencyUser        (login da equipe, bcrypt)
 | Auth | `auth/magic-link`, `auth/verify`, `auth/logout`, `agency/auth/login`, `agency/signup` |
 | Onboarding (cliente) | `onboarding/[token]`, `/step`, `/assets`, `/connections`, `/sign-contract` |
 | Agência | `agency/onboardings` (+`[id]`, `/analyze`, `/campaign`, `/report`), `agency/settings`, `agency/analytics`, `agency/templates` (+`[id]`), `agency/api-key`, `agency/onboarded` |
-| Billing | `agency/billing`, `/subscribe`, `/cancel`, `webhooks/mercadopago` |
+| Billing | `agency/billing`, `/subscribe`, `/portal`, `webhooks/stripe` |
 | OAuth | `oauth/meta` + `/callback`, `oauth/google` + `/callback` |
 | Marketplace | `marketplace/templates`, `/[id]/use` |
 | API pública v1 | `v1/onboardings`, `v1/onboardings/[id]` |
@@ -156,7 +156,7 @@ Agency ──┬── AgencyUser        (login da equipe, bcrypt)
 | Google Drive | `lib/google-drive.ts` | Service Account cria pasta por onboarding |
 | Evolution API | `lib/evolution.ts` | Notificações WhatsApp |
 | Anthropic | `lib/claude.ts` | `analyzeBriefing()` → relatório markdown do briefing |
-| Mercado Pago | `lib/mercadopago.ts` | Assinaturas (Preapproval) + webhook assinado |
+| Stripe | `lib/stripe.ts` | Assinaturas (Checkout + Billing Portal) + webhook assinado |
 | ClickUp / Notion / Trello | `lib/projectmanagement.ts` | `createProjectTask()` ao concluir onboarding |
 | Webhook próprio | `lib/webhook.ts` | Dispatcher configurável pela agência |
 
@@ -211,7 +211,7 @@ META_APP_ID  META_APP_SECRET
 GOOGLE_CLIENT_ID  GOOGLE_CLIENT_SECRET
 GOOGLE_SA_EMAIL  GOOGLE_SA_PRIVATE_KEY  GOOGLE_DRIVE_PARENT_ID
 EVOLUTION_API_URL  EVOLUTION_API_KEY  EVOLUTION_INSTANCE
-MP_ACCESS_TOKEN  MP_WEBHOOK_SECRET  MP_PLAN_STARTER_ID  MP_PLAN_PRO_ID  MP_PLAN_AGENCY_ID
+STRIPE_SECRET_KEY  STRIPE_WEBHOOK_SECRET  STRIPE_PRICE_STARTER  STRIPE_PRICE_PRO  STRIPE_PRICE_AGENCY
 ANTHROPIC_API_KEY
 NEXT_PUBLIC_APP_URL  NEXT_PUBLIC_BASE_DOMAIN  NODE_ENV
 ```

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { OnboardingStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { requireApiKey } from "@/lib/apikey";
-import { getClientLimit } from "@/lib/mercadopago";
+import { getClientLimit } from "@/lib/stripe";
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "";
 

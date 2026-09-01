@@ -80,14 +80,18 @@ EVOLUTION_API_URL=  EVOLUTION_API_KEY=  EVOLUTION_INSTANCE=
 ```
 Pasta no Drive e aviso por WhatsApp ao concluir. O onboarding completa sem elas.
 
-### 6º — Mercado Pago (destrava cobrar)
+### 6º — Stripe (destrava cobrar)
 ```
-MP_ACCESS_TOKEN=  MP_WEBHOOK_SECRET=
-MP_PLAN_STARTER_ID=c696c00ae61a40748b010c83d2ae4f5f
-MP_PLAN_PRO_ID=3c72932f00334ee28d5f98862f2926d6
-MP_PLAN_AGENCY_ID=38550466d48f462cb4fd34f20c819db0
+STRIPE_SECRET_KEY=  STRIPE_WEBHOOK_SECRET=
+STRIPE_PRICE_STARTER=  STRIPE_PRICE_PRO=  STRIPE_PRICE_AGENCY=
 ```
-Os IDs de plano já estão no roadmap; faltam o token e o segredo de webhook. Fica por último de propósito: o trial é de 14 dias, então dá para ter agência usando antes de a cobrança existir.
+**A cobrança migrou de Mercado Pago para Stripe em 01/09/2026** (conta `acct_1UAadi51u09tsgSW`, entidade BR, BRL). O MP saiu do repositório inteiro; os `MP_*` que estavam aqui não valem mais.
+
+Os três `price_...` saem de `scripts/create-stripe-products.ps1` — o script é idempotente, então rodar com a chave `sk_live_` cria os mesmos planos em produção e imprime os IDs prontos. (`scripts/check-stripe.ps1` diagnostica a conta: país, moeda, trilhos de pagamento e pendências.) O `STRIPE_WEBHOOK_SECRET` vem de dashboard.stripe.com/webhooks ao cadastrar `https://vertice.roilabs.com.br/api/webhooks/stripe` com os eventos `checkout.session.completed`, `customer.subscription.created/updated/deleted` e `invoice.payment_failed`.
+
+⚠️ **A migração `20260901000000_stripe_billing` precisa rodar no banco de produção ANTES do deploy.** O `build` é `prisma generate && next build`, sem `prisma migrate deploy` — nada aplica migração sozinho. E como `agency/signup` e três `update` consultam a Agency sem `select`, o Prisma monta o SQL com todas as colunas: sem a migração, **o /signup também cai**, não só o billing.
+
+Fica por último de propósito: o trial é de 14 dias, então dá para ter agência usando antes de a cobrança existir.
 
 ---
 

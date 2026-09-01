@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAgencySession } from "@/lib/auth";
-import { PLANS, getClientLimit } from "@/lib/mercadopago";
+import { PLANS, getClientLimit } from "@/lib/stripe";
 
 // GET /api/agency/billing
 // Returns current plan info for the agency.
@@ -14,8 +14,8 @@ export async function GET() {
       select: {
         plan: true,
         trialEndsAt: true,
-        mpSubscriptionId: true,
-        mpSubscriptionStatus: true,
+        stripeSubscriptionId: true,
+        stripeSubscriptionStatus: true,
         createdAt: true,
       },
     });
@@ -40,8 +40,8 @@ export async function GET() {
       trialEndsAt: agency.plan === "trial" ? trialEndsAt.toISOString() : null,
       trialDaysLeft,
       clientLimit,
-      mpSubscriptionId: agency.mpSubscriptionId,
-      mpSubscriptionStatus: agency.mpSubscriptionStatus,
+      stripeSubscriptionId: agency.stripeSubscriptionId,
+      stripeSubscriptionStatus: agency.stripeSubscriptionStatus,
       plans: Object.entries(PLANS).map(([key, p]) => ({
         key,
         name: p.name,

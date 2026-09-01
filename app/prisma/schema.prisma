@@ -16,8 +16,9 @@ model Agency {
   whatsappPhone        String?
   plan                 String                @default("trial")
   trialEndsAt          DateTime?
-  mpSubscriptionId     String?               @unique
-  mpSubscriptionStatus String?
+  stripeCustomerId     String?               @unique
+  stripeSubscriptionId String?               @unique
+  stripeSubscriptionStatus String?
   onboardedAt          DateTime?
   contractTemplate     String?
   apiKeyHash           String?               @unique

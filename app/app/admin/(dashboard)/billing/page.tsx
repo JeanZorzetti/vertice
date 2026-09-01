@@ -8,8 +8,8 @@ interface BillingInfo {
   trialEndsAt: string | null;
   trialDaysLeft: number | null;
   clientLimit: number;
-  mpSubscriptionId: string | null;
-  mpSubscriptionStatus: string | null;
+  stripeSubscriptionId: string | null;
+  stripeSubscriptionStatus: string | null;
   plans: Array<{
     key: string;
     name: string;
@@ -61,23 +61,22 @@ export default function BillingPage() {
       body: JSON.stringify({ plan: planKey }),
     });
     const data = await r.json();
-    if (data.initPoint) {
-      window.location.href = data.initPoint;
+    if (data.url) {
+      window.location.href = data.url;
     } else {
       alert(data.error ?? "Erro ao criar assinatura.");
       setSubscribing(null);
     }
   }
 
-  async function handleCancel() {
-    if (!confirm("Tem certeza que deseja cancelar sua assinatura? Você perderá acesso ao fim do período pago.")) return;
+  async function handleManage() {
     setCancelling(true);
-    const r = await fetch("/api/agency/billing/cancel", { method: "POST" });
+    const r = await fetch("/api/agency/billing/portal", { method: "POST" });
     const data = await r.json();
-    if (data.ok) {
-      window.location.reload();
+    if (data.url) {
+      window.location.href = data.url;
     } else {
-      alert(data.error ?? "Erro ao cancelar.");
+      alert(data.error ?? "Erro ao abrir o portal de cobrança.");
       setCancelling(false);
     }
   }
@@ -135,13 +134,13 @@ export default function BillingPage() {
               : `Até ${billing.clientLimit} cliente${billing.clientLimit !== 1 ? "s" : ""} ativo${billing.clientLimit !== 1 ? "s" : ""}`}
           </p>
         </div>
-        {billing.mpSubscriptionId && billing.mpSubscriptionStatus === "authorized" && (
+        {billing.stripeSubscriptionId && billing.stripeSubscriptionStatus !== "canceled" && (
           <button
-            onClick={handleCancel}
+            onClick={handleManage}
             disabled={cancelling}
-            className="text-sm font-semibold text-red-600 hover:text-red-800 transition-colors disabled:opacity-60"
+            className="text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors disabled:opacity-60"
           >
-            {cancelling ? "Cancelando..." : "Cancelar assinatura"}
+            {cancelling ? "Abrindo..." : "Gerenciar assinatura"}
           </button>
         )}
       </div>
