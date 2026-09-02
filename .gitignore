@@ -11,14 +11,17 @@ app/out/
 app/build/
 
 # env files — NEVER commit secrets
-app/.env
-app/.env.local
-app/.env.development.local
-app/.env.test.local
-app/.env.production.local
+# Unanchored on purpose: these match in ANY directory, not just app/.
+# A .env at the repo root used to slip past the old app/-prefixed patterns.
+.env
+.env.*
+!.env.example
 
 # vercel
 .vercel
+
+# spec-kit reference clone (used only to refresh .specify/ scripts; not part of the project)
+/spec-kit/
 
 # misc
 .DS_Store
