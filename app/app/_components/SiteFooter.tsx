@@ -58,7 +58,7 @@ export default function SiteFooter() {
           ))}
         </div>
         <div className="border-t border-gray-100 pt-8">
-          <p className="text-sm text-[#4c669a]">© 2025 Vértice. Todos os direitos reservados.</p>
+          <p className="text-sm text-[#4c669a]">© {new Date().getFullYear()} Vértice. Todos os direitos reservados.</p>
         </div>
       </div>
     </footer>
